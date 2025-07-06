@@ -1,41 +1,40 @@
-skills_list = [
-    # Programming Languages
-    "Python", "Java", "JavaScript", "TypeScript", "C", "C++", "C#", "Ruby", "Swift",
-    "Kotlin", "PHP", "Go", "Rust", "Scala", "SQL", "MATLAB", "R", "Dart",
-    
-    # Frameworks and Libraries
-    "React", "Angular", "Vue.js", "Django", "Flask", "Spring", ".NET", "Express.js",
-    "Node.js", "TensorFlow", "PyTorch", "Keras", "Bootstrap", "jQuery",
-    "Entity Framework", "ASP.NET", "Flutter",
-    
-    # Tools and Platforms
-    "Docker", "Kubernetes", "Git", "Jenkins", "Travis CI", "CircleCI", "AWS", "Azure",
-    "Google Cloud Platform", "Google Cloud", "Google Cloud Functions", "Heroku", "Firebase", 
-    "Terraform", "Ansible", "Chef", "Puppet", "Docker Swarm", "Postman",
-    
-    # Databases
-    "MySQL", "PostgreSQL", "MongoDB", "Redis", "Oracle", "Microsoft SQL Server",
-    "MS SQL Server", "Cassandra", "Elasticsearch", "SQLite",
-    
-    # Development Practices & Concepts
-    "REST API", "GraphQL", "Microservices", "Agile", "Scrum", "Kanban",
-    "Test-Driven Development", "Continuous Integration", "Continuous Deployment",
-    "DevOps", "Object-Oriented Programming", "Functional Programming",
-    "MVC", "MVVM",
-    
-    # Data Science & Machine Learning
-    "Machine Learning", "Deep Learning", "Natural Language Processing",
-    "Data Analysis", "Data Visualization", "Pandas", "NumPy", "Scikit-learn",
-    "OpenCV", "Computer Vision", "Big Data", "Hadoop", "Spark", "Seaborn", "XGBoost", "Joblib",
-    
-    # Soft Skills
-    "Communication", "Teamwork", "Problem Solving", "Leadership",
-    "Time Management", "Adaptability", "Creativity", "Critical Thinking",
-    "Collaboration", "Attention to Detail", "Strategic Thinking", "Strong Communication", "Analytical Skills",
-    
-    # Cloud & Infrastructure
-    "AWS Lambda", "EC2", "S3", "CloudFormation", "Serverless", "Cloud Security",
-    
-    # Additional
-    "Blockchain", "WordPress"
+import os
+import pandas as pd
+import json
+
+# Get the folder where this script file lives
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# Construct the full path to CSV
+csv_path = os.path.join(BASE_DIR, "survey_results_public.csv")
+
+df = pd.read_csv(csv_path)
+
+
+skill_columns = [
+    "LanguageHaveWorkedWith",
+    "DatabaseHaveWorkedWith",
+    "PlatformHaveWorkedWith",
+    "WebframeHaveWorkedWith",
+    "MiscTechHaveWorkedWith",
+    "ToolsTechHaveWorkedWith",
 ]
+
+
+existing_columns = [col for col in skill_columns if col in df.columns]
+print(existing_columns)
+
+skills_set = set()
+
+for col in existing_columns:
+    for entry in df[col].dropna():
+        for skill in entry.split(';'):
+            skills_set.add(skill.strip())
+
+skills_list = sorted(skills_set)
+print(skills_list[:20])
+
+
+with open("skills_list.json", "w") as f:
+    json.dump(skills_list, f)
+print("Skills list saved to skills_list.json")

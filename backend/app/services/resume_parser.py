@@ -25,7 +25,6 @@ def analyze_resume_text(text: str) -> dict:
     email = extract_email(text)
     phone = extract_phone(text)
     skills = extract_skills(text)
-    education = extract_education(text)
     experience = extract_experience(text)
 
     return {
@@ -33,7 +32,6 @@ def analyze_resume_text(text: str) -> dict:
         "email": email,
         "phone": phone,
         "skills": skills,
-        "education": education,
         "experience": experience,
     }
 
@@ -91,32 +89,103 @@ def extract_skills(text: str) -> list:
 
     # Strip whitespace, remove empties
     skills = [s.strip() for s in raw_skills if s.strip()]
-    return skills
 
-def extract_experience(text: str) -> str:
+    ignoringWordsList = {
+    "languages", "programming languages", "framework & libraries",
+    "databases", "others", "personal skills", "tools", "skills", 
+    "technologies", "frameworks", "soft skills", "technical skills"
+    }
+
+    filtered_skills = []
+    for skill in skills:
+        skill_clean = skill.lower().strip()
+
+        if skill_clean in ignoringWordsList:
+            continue
+
+        if len(skill_clean) <= 2:
+            continue
+
+        if len(skill_clean.split()) > 4:  # too long to be a skill
+            continue
+
+        filtered_skills.append(skill)
+
+    return filtered_skills
+
+def extract_experience(text: str) -> list:
     # Normalize special dashes
     text = re.sub(r"[–—−‐]", "-", text)
-    # Match SKILLS section to next known section or end of file
+
+    # Find the experience section
     match = re.search(
-    r"(?is)(?:^|\n)(work experience|experience|professional experience)\s*\n(.*?)(?=\n(?:certifications|education|skills|projects|summary|contact|languages|profile|additional information|additional)\b|\Z)",
-    text,
-    re.M,
-)
+        r"(?is)(?:^|\n)(work experience|experience|professional experience)\s*\n(.*?)(?=\n(?:certifications|education|skills|projects|summary|contact|languages|profile|additional information|additional)\b|\Z)",
+        text,
+        re.M,
+    )
     if not match:
         return []
-    # Join broken lines in the skills section
-    experience_section = match.group(1)
-    experience_section = re.sub(r"\n+", " ", experience_section)  # all newlines become spaces
-    print("---------- EXPERIENCE SECTION RAW TEXT ----------")
-    print(experience_section)
-    print("---------- END OF EXPERIENCE SECTION RAW TEXT ----------")
 
-    # Now split cleanly by known delimiters
-    raw_experience = re.split(r"\s*\|\s*|\s{2,}|,\s*", experience_section)
+    experience_section = match.group(2)
+    lines = [line.strip() for line in experience_section.split("\n") if line.strip()]
 
-    # Strip whitespace, remove empties
-    skills = [s.strip() for s in raw_experience if s.strip()]
-    return skills
+    date_pattern = re.compile(
+        r"\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4}\s*-\s*(?:Present|\w+\s+\d{4})",
+        re.I,
+    )
+
+    # Pattern to find a date range anywhere in the string (for splitting location+dates)
+    split_date_pattern = re.compile(
+        r"(.*?)(\b(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)[a-z]*\s+\d{4}\s*-\s*(?:Present|\w+\s+\d{4}).*)",
+        re.I,
+    )
+
+    experiences = []
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        parts = [p.strip() for p in line.split('|')]
+
+        if len(parts) == 3:
+            title, company, location = parts
+            i += 1
+        else:
+            title = line
+            company = lines[i + 1] if i + 1 < len(lines) else ""
+            location = lines[i + 2] if i + 2 < len(lines) else ""
+            i += 3
+
+        # Check if location contains dates and split
+        m = split_date_pattern.match(location)
+        if m:
+            location = m.group(1).strip()
+            dates = m.group(2).strip()
+        else:
+            # Check if next line is dates
+            if i < len(lines) and date_pattern.match(lines[i]):
+                dates = lines[i]
+                i += 1
+            else:
+                dates = ""
+
+        # Collect bullets
+        bullets = []
+        while i < len(lines) and re.match(r"^[-•]", lines[i]):
+            bullets.append(lines[i].lstrip("-• ").strip())
+            i += 1
+
+        experiences.append(
+            {
+                "title": title,
+                "company": company,
+                "location": location,
+                "dates": dates,
+                "bullets": bullets,
+            }
+        )
+
+    return experiences
+
 
 def extract_education(text: str) -> list:
     import re
