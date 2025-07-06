@@ -32,3 +32,6 @@ __pycache__/
 
 
 backend/.env
+
+survey_results_public.csv
+*.csv
