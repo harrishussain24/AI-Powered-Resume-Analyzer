@@ -3,13 +3,8 @@ from spacy.matcher import PhraseMatcher
 import json
 import re
 import os
+from services.skills_list import skills_list
 
-# Load the skills list once (adjust path if needed)
-BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-skills_path = os.path.join(BASE_DIR, "skills_list.json")
-
-with open(skills_path, "r") as f:
-    skills_list = json.load(f)
 
 nlp = spacy.load("en_core_web_sm")
 
@@ -28,9 +23,18 @@ def analyze_job_description(text: str) -> dict:
         "education": []
     }
 
-    exp_match = re.search(r'(\d+\+?\s*years?)\s*(?:of\s*)?experience', text, re.I)
-    if exp_match:
-        result["experience"] = exp_match.group(1)
+    experience_patterns = [
+    r'\d+\+?\s*years?\s*(?:of\s*)?experience',
+    r'hands[-\s]?on experience(?: with [\w\s,]+)?',
+    r'proven experience(?: with [\w\s,]+)?',
+    r'experience with [\w\s,]+'
+    ]
+
+    for pattern in experience_patterns:
+        match = re.search(pattern, text, re.I)
+        if match:
+            result["experience"] = match.group(0).strip()
+            break
 
     education_keywords = ["bachelor", "master", "phd", "mba", "degree", "diploma"]
     for keyword in education_keywords:

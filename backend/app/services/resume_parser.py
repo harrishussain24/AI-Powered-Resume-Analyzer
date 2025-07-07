@@ -3,21 +3,20 @@ from fastapi import UploadFile
 import spacy
 import re
 from spacy.matcher import PhraseMatcher
-from services.skills import skills_list  
+
+
+nlp = spacy.load("en_core_web_sm")
 
 
 def extract_text_from_pdf(file: UploadFile) -> str:
     # Extract text from a pdf.
     text = extract_text(file.file)
-    # Close the file after reading
-    file.file.close()
-    # Return the extracted text
+    # Do NOT close the file here; let the caller close it
     if not text:
         return "No text found in the PDF file."
     text = text.strip()
     if not text:
         return "The PDF file is empty or contains no readable text."
-    # Return the extracted text
     return text
 
 def analyze_resume_text(text: str) -> dict:
@@ -36,7 +35,7 @@ def analyze_resume_text(text: str) -> dict:
     }
 
 def extract_name(text: str) -> str:
-    nlp = spacy.load("en_core_web_sm")
+    
     lines = text.splitlines()
     header = "\n".join(lines[:5])
     doc = nlp(header)
