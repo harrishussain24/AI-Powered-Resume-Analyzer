@@ -1,12 +1,30 @@
 <script setup>
 import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useResumeStore } from '../stores/resumeStore'
 
+const resumeStore = useResumeStore()
+const router = useRouter()
 const selectedFile = ref(null)
 const fileInput = ref(null)
 const isSubmitting = ref(false)
 const uploadResult = ref(null)
 const uploadError = ref(null)
 const resumeData = ref(null)
+
+
+const goToJobDescriptionView = () => {
+  console.log('Going to JD view with:', resumeData.value)
+
+  if (!resumeData.value) {
+    console.warn("Resume data is missing!")
+    return
+  }
+
+  resumeStore.setResume(resumeData.value)  
+  router.push('/job-description')
+}
+
 
 const triggerFileSelect = () => {
   fileInput.value?.click()
@@ -109,7 +127,7 @@ const handleSubmit = async () => {
         ❌ {{ uploadError }}
       </div>
     </form>
-    <div v-if="resumeData" class="mt-6 p-4 bg-gray-100 rounded">
+<div v-if="resumeData" class="mt-6 p-4 bg-gray-100 rounded">
   <h2 class="text-lg font-semibold">Parsed Resume Info:</h2>
   <p><strong>Name:</strong> {{ resumeData.analysis.name || 'N/A' }}</p>
   <p><strong>Email:</strong> {{ resumeData.analysis.email || 'N/A' }}</p>
@@ -121,6 +139,21 @@ const handleSubmit = async () => {
     </span>
     <span v-else>N/A</span>
   </p>
+  <div v-if="resumeData.analysis.experience && resumeData.analysis.experience.length">
+  <h2 class="font-semibold text-lg mb-2">Experience:</h2>
+  <div v-for="(exp, index) in resumeData.analysis.experience" :key="index" class="mb-4 border-b pb-2">
+    <p class="font-medium">{{ exp.title }} at {{ exp.company }}</p>
+    <p class="text-sm text-gray-600">{{ exp.location }} • {{ exp.dates }}</p>
+    <ul class="list-disc list-inside mt-1 text-sm">
+      <li v-for="(bullet, i) in exp.bullets" :key="i">{{ bullet }}</li>
+    </ul>
+  </div>
 </div>
+<span v-else>N/A</span>
+
+</div>
+<button @click="goToJobDescriptionView" class="mt-4 bg-green-600 text-white px-4 py-2 rounded">
+  Continue to Job Description
+</button>
   </template>
   

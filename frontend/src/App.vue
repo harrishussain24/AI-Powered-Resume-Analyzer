@@ -1,10 +1,6 @@
-<script setup>
-import uploadresume from './views/uploadresume.vue'
-</script>
 
 <template>
-  
-  <uploadresume msg="Upload Resume" />
+  <router-view />
 </template>
 
 <style scoped>
