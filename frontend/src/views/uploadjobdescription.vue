@@ -17,7 +17,7 @@ const analyzeJobDescription = async () => {
   error.value = null
 
   try {
-    const response = await fetch('http://127.0.0.1:8000/analyze-jd', {
+    const response = await fetch('http://127.0.0.1:8000/analyze-job', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ description: jobDescription.value })
@@ -27,7 +27,7 @@ const analyzeJobDescription = async () => {
 
     if (response.ok) {
       store.setJobDescription(result)
-      router.push('/match-results')
+      //router.push('/match-results')
     } else {
       error.value = 'API error: ' + response.status
     }
@@ -48,4 +48,26 @@ const analyzeJobDescription = async () => {
     </button>
     <p v-if="error" class="text-red-500 mt-2">{{ error }}</p>
   </div>
+  <div v-if="store.jobDescriptionData" class="mt-6 p-4 bg-gray-100 rounded">
+  <h3 class="text-lg font-semibold mb-2">Parsed Job Description</h3>
+  <p><strong>Title:</strong> {{ store.jobDescriptionData.title || 'N/A' }}</p>
+  <p>
+    <strong>Skills:</strong>
+    <span v-if="store.jobDescriptionData.skills && store.jobDescriptionData.skills.length">
+      {{ store.jobDescriptionData.skills.join(', ') }}
+    </span>
+    <span v-else>N/A</span>
+  </p>
+  <p>
+    <strong>Experience:</strong>
+    {{ store.jobDescriptionData.experience || 'N/A' }}
+  </p>
+  <p>
+    <strong>Education:</strong>
+    <span v-if="store.jobDescriptionData.education && store.jobDescriptionData.education.length">
+      {{ store.jobDescriptionData.education.join(', ') }}
+    </span>
+    <span v-else>N/A</span>
+  </p>
+</div>
 </template>
