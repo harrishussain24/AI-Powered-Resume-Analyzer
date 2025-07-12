@@ -7,12 +7,14 @@ import { createPinia } from 'pinia'
 // Import your components
 import ResumeUploader from './views/uploadresume.vue'
 import JobDescriptionUploader from './views/uploadjobdescription.vue'
+import MatchResults from './views/matchresults.vue'
 
 const pinia = createPinia()
 
 const routes = [
     { path: '/', component: ResumeUploader },
-    { path: '/job-description', component: JobDescriptionUploader, props: true }
+    { path: '/job-description', component: JobDescriptionUploader, props: true },
+    { path: '/match-results', component: MatchResults } 
   ]
 
 const router = createRouter({

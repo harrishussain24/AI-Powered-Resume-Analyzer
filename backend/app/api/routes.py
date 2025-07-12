@@ -3,7 +3,7 @@ from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from services.resume_parser import extract_text_from_pdf, analyze_resume_text
 from models.session import get_db
-from models.db import Resume
+from models.db import Resume, JobDescription
 from services.job_description_analyzer import analyze_job_description
 from fastapi import Body
 from services.matcher import match_resume_to_job
@@ -70,12 +70,31 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
 
 
 @router.post("/analyze-job/")
-async def analyze_job(description: str = Body(..., embed=True)):
+async def analyze_job(description: str = Body(..., embed=True), db: AsyncSession = Depends(get_db)):
     if not description or not description.strip():
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Job description must not be empty.")
+    
     try:
         result = analyze_job_description(description)
-        return result
+        
+        # Save to database
+        parsed_json = json.dumps(result)
+        
+        new_job_description = JobDescription(
+            title=result.get('title', ''),
+            content=description,
+            parsed_data=parsed_json
+        )
+        
+        db.add(new_job_description)
+        await db.commit()
+        await db.refresh(new_job_description)
+        
+        return {
+            "id": new_job_description.id,
+            "title": new_job_description.title,
+            "analysis": result
+        }
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to analyze job description: {str(e)}")
 
