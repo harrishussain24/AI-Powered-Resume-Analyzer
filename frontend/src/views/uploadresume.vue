@@ -116,7 +116,7 @@ const deleteFile = (index) => {
         @click="router.push('/login')"
         class="login-button-main"
       >
-        Login
+        Login / Signup
       </button>
     </div>
 
@@ -267,6 +267,8 @@ const deleteFile = (index) => {
   padding: 1rem 1.5rem;
   width: 100vw;
   margin-bottom: 2rem;
+  margin-left: calc(-50vw + 50%);
+  margin-top: -1.5rem;
 }
 .upload-area {
   background: #fff;
@@ -772,7 +774,7 @@ const deleteFile = (index) => {
 }
 
 .login-button-main {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #016064 0%, #48AAAD 100%);
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -781,19 +783,19 @@ const deleteFile = (index) => {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 15px rgba(1, 96, 100, 0.3);
   text-decoration: none;
   display: inline-block;
 }
 
 .login-button-main:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
+  background: linear-gradient(135deg, #014d50 0%, #3a8a8d 100%);
 }
 
 .login-button-main:active {
   transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 2px 10px rgba(1, 96, 100, 0.3);
 }
 </style>

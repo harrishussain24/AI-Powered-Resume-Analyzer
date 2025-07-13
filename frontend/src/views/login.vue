@@ -139,7 +139,7 @@ const goToSignup = () => {
 <style scoped>
 .login-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #016064 0%, #48AAAD 100%);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -201,9 +201,9 @@ const goToSignup = () => {
 
 .form-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: #48AAAD;
   background: white;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(72, 170, 173, 0.1);
 }
 
 .error-message {
@@ -225,7 +225,7 @@ const goToSignup = () => {
 }
 
 .login-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #016064 0%, #48AAAD 100%);
   color: white;
   padding: 1rem;
   border: none;
@@ -239,7 +239,7 @@ const goToSignup = () => {
 
 .login-button:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 10px 25px rgba(1, 96, 100, 0.3);
 }
 
 .login-button:disabled {
@@ -261,7 +261,7 @@ const goToSignup = () => {
 .signup-button {
   background: none;
   border: none;
-  color: #667eea;
+  color: #48AAAD;
   font-weight: 600;
   cursor: pointer;
   transition: color 0.3s ease;
@@ -269,7 +269,7 @@ const goToSignup = () => {
 }
 
 .signup-button:hover {
-  color: #5a67d8;
+  color: #016064;
   text-decoration: underline;
 }
 
