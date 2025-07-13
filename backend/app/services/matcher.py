@@ -3,9 +3,15 @@ import torch
 from sentence_transformers import SentenceTransformer, util
 from rapidfuzz import fuzz, process
 
-# Initialize model once globally
-model = SentenceTransformer('all-MiniLM-L6-v2')
+# Lazy load model to save memory
+_model = None
 
+def get_model():
+    global _model
+    if _model is None:
+        # Use smaller model for memory efficiency
+        _model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
+    return _model
 
 def fuzzy_skill_match(resume_skills, job_skills, threshold=80):
     """
@@ -46,14 +52,16 @@ def match_resume_to_job(resume: dict, job: dict) -> dict:
 
     # Experience semantic similarity
     if all_bullets and job_description.strip():
-        embeddings_resume = model.encode(all_bullets, convert_to_tensor=True)
+        model = get_model()
+        embeddings_resume = model.encode(all_bullets, convert_to_tensor=True, device='cpu')
         avg_embedding_resume = torch.mean(embeddings_resume, dim=0)
-        embeddings_job = model.encode(job_description, convert_to_tensor=True)
+        embeddings_job = model.encode(job_description, convert_to_tensor=True, device='cpu')
         cosine_score = util.pytorch_cos_sim(avg_embedding_resume, embeddings_job)
         experience_match_score = round(float(cosine_score.item()), 2)
     elif resume_experience_text.strip() and job_description.strip():
-        embeddings_resume = model.encode(resume_experience_text, convert_to_tensor=True)
-        embeddings_job = model.encode(job_description, convert_to_tensor=True)
+        model = get_model()
+        embeddings_resume = model.encode(resume_experience_text, convert_to_tensor=True, device='cpu')
+        embeddings_job = model.encode(job_description, convert_to_tensor=True, device='cpu')
         cosine_score = util.pytorch_cos_sim(embeddings_resume, embeddings_job)
         experience_match_score = round(float(cosine_score.item()), 2)
     else:
