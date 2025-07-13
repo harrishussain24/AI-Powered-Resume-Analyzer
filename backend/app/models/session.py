@@ -3,7 +3,7 @@ import ssl
 from dotenv import load_dotenv
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.orm import sessionmaker
-from models.db import Base
+from app.models.db import Base
 from contextlib import asynccontextmanager
 print("DATABASE_URL env var is:", os.getenv("DATABASE_URL"))
 load_dotenv()

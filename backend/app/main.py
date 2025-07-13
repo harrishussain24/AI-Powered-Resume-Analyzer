@@ -1,8 +1,8 @@
 from fastapi import FastAPI
-from api.routes import router as core_router
-from models.session import init_db
+from app.api.routes import router as core_router
+from app.models.session import init_db
 from fastapi.middleware.cors import CORSMiddleware
-from api.authroutes import router as auth_router
+from app.api.authroutes import router as auth_router
 import os
 
 # Only load dotenv locally

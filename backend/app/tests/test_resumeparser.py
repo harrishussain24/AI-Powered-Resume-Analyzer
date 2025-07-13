@@ -3,7 +3,7 @@ import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 import pytest
-from services.resume_parser import extract_name, extract_email, extract_phone, extract_skills, extract_experience
+from app.services.resume_parser import extract_name, extract_email, extract_phone, extract_skills, extract_experience
 
 sample_resume_text = """
 John Doe
