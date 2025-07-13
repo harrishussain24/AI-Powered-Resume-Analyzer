@@ -64,3 +64,6 @@ survey_results_public.csv
 
 # Tests folder
 app/tests/
+
+
+frontend/

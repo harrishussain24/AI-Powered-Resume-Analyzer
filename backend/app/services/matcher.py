@@ -6,6 +6,7 @@ from rapidfuzz import fuzz, process
 # Initialize model once globally
 model = SentenceTransformer('all-MiniLM-L6-v2')
 
+
 def fuzzy_skill_match(resume_skills, job_skills, threshold=80):
     """
     Perform fuzzy matching between resume skills and job skills using rapidfuzz.
