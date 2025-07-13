@@ -139,25 +139,20 @@ const deleteFile = (index) => {
 <template>
   <!-- Main Content -->
   <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow relative">
-    <!-- Heading and Auth Section in Flex Row -->
-    <div class="header-auth-row">
-      <div class="heading-section mb-0">
-        <h2 class="text-3xl font-bold text-gray-800 mb-0 ml-0">Upload Your Resume</h2>
-      </div>
-      <!-- Auth Section -->
-      <div class="auth-container-static">
-        <!-- Show user info when logged in -->
+    <!-- Header Bar: Heading and Auth Button -->
+    <div class="header-bar">
+      <h2 class="header-title">Upload Your Resume</h2>
+      <div class="auth-container-bar">
         <div v-if="user" class="user-info">
           <span class="user-name">Welcome, {{ user.name || user.email }}</span>
           <button @click="logout" class="logout-button">
             Logout
           </button>
         </div>
-        <!-- Show login button when not logged in -->
-        <div v-else class="login-button-container-static">
+        <div v-else class="login-button-container-bar">
           <button
             @click="router.push('/login')"
-            class="login-button-main-static"
+            class="login-button-main-bar"
           >
             Login / Signup
           </button>
@@ -302,37 +297,37 @@ const deleteFile = (index) => {
 </template>
 
 <style scoped>
-.header-auth-row {
+.header-bar {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 0;
-  padding-bottom: 0;
+  background: #016064;
+  border-radius: 1.25rem;
+  padding: 1.5rem 2.5rem 1.5rem 2.5rem;
+  margin-bottom: 2rem;
+  margin-top: 0;
 }
-.heading-section {
-  background-color: #016064;
+.header-title {
   color: white;
-  padding: 1.25rem 2.5rem;
-  border-radius: 1rem;
+  font-size: 2.25rem;
+  font-weight: 700;
   margin: 0;
-  width: auto;
-  display: flex;
-  align-items: center;
+  padding: 0;
+  letter-spacing: -0.5px;
 }
-.auth-container-static {
+.auth-container-bar {
   display: flex;
-  align-items: center;
-  margin-left: 2rem;
+  align-items: flex-start;
 }
-.login-button-container-static {
+.login-button-container-bar {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
 }
-.login-button-main-static {
+.login-button-main-bar {
   background: linear-gradient(135deg, #48AAAD 0%, #016064 100%);
   color: white;
   padding: 0.85rem 2.5rem;
-  min-width: 160px;
+  min-width: 170px;
   border: none;
   border-radius: 12px;
   font-size: 1.1rem;
@@ -342,13 +337,15 @@ const deleteFile = (index) => {
   box-shadow: 0 4px 15px rgba(1, 96, 100, 0.3);
   text-decoration: none;
   display: inline-block;
+  margin-top: 0.25rem;
+  margin-right: 0.25rem;
 }
-.login-button-main-static:hover {
+.login-button-main-bar:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
   background: linear-gradient(135deg, #3a8a8d 0%, #014d50 100%);
 }
-.login-button-main-static:active {
+.login-button-main-bar:active {
   transform: translateY(0);
   box-shadow: 0 2px 10px rgba(1, 96, 100, 0.3);
 }
@@ -361,6 +358,8 @@ const deleteFile = (index) => {
   border-radius: 12px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
   border: 2px solid #48AAAD;
+  margin-top: 0.25rem;
+  margin-right: 0.25rem;
 }
 .user-name {
   color: #016064;
