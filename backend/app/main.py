@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from api.routes import router
-from models.session import init_db
+from app.api.routes import router
+from app.models.session import init_db
 from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
 

@@ -1,12 +1,12 @@
 import json
 from fastapi import APIRouter, UploadFile, File, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from services.resume_parser import extract_text_from_pdf, analyze_resume_text
-from models.session import get_db
-from models.db import Resume, JobDescription
-from services.job_description_analyzer import analyze_job_description
+from app.services.resume_parser import extract_text_from_pdf, analyze_resume_text
+from app.models.session import get_db
+from app.models.db import Resume, JobDescription
+from app.services.job_description_analyzer import analyze_job_description
 from fastapi import Body
-from services.matcher import match_resume_to_job
+from app.services.matcher import match_resume_to_job
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 from pdfminer.pdfparser import PDFSyntaxError
