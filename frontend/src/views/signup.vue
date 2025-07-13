@@ -58,19 +58,19 @@ const goToLogin = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center p-4">
-    <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-8">
+  <div class="signup-container">
+    <div class="signup-card">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h1>
-        <p class="text-gray-600">Join us to analyze your resume</p>
+      <div class="signup-header">
+        <h1 class="signup-title">Create Account</h1>
+        <p class="signup-subtitle">Join us to analyze your resume</p>
       </div>
 
       <!-- Signup Form -->
-      <form @submit.prevent="handleSignup" class="space-y-6">
+      <form @submit.prevent="handleSignup" class="signup-form">
         <!-- Name Field -->
-        <div>
-          <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="name" class="form-label">
             Full Name
           </label>
           <input
@@ -78,14 +78,14 @@ const goToLogin = () => {
             v-model="name"
             type="text"
             required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+            class="form-input"
             placeholder="Enter your full name"
           />
         </div>
 
         <!-- Email Field -->
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="email" class="form-label">
             Email Address
           </label>
           <input
@@ -93,14 +93,14 @@ const goToLogin = () => {
             v-model="email"
             type="email"
             required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+            class="form-input"
             placeholder="Enter your email"
           />
         </div>
 
         <!-- Password Field -->
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="password" class="form-label">
             Password
           </label>
           <input
@@ -108,14 +108,14 @@ const goToLogin = () => {
             v-model="password"
             type="password"
             required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+            class="form-input"
             placeholder="Enter your password"
           />
         </div>
 
         <!-- Confirm Password Field -->
-        <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-2">
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">
             Confirm Password
           </label>
           <input
@@ -123,18 +123,18 @@ const goToLogin = () => {
             v-model="confirmPassword"
             type="password"
             required
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition duration-200"
+            class="form-input"
             placeholder="Confirm your password"
           />
         </div>
 
         <!-- Error Message -->
-        <div v-if="error" class="text-red-600 text-sm bg-red-50 p-3 rounded-lg">
+        <div v-if="error" class="error-message">
           ❌ {{ error }}
         </div>
 
         <!-- Success Message -->
-        <div v-if="success" class="text-green-600 text-sm bg-green-50 p-3 rounded-lg">
+        <div v-if="success" class="success-message">
           ✅ {{ success }}
         </div>
 
@@ -142,7 +142,7 @@ const goToLogin = () => {
         <button
           type="submit"
           :disabled="isSigningUp"
-          class="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 px-4 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+          class="signup-button"
         >
           <span v-if="isSigningUp">Creating account...</span>
           <span v-else>Create Account</span>
@@ -150,12 +150,12 @@ const goToLogin = () => {
       </form>
 
       <!-- Login Link -->
-      <div class="text-center mt-6">
-        <p class="text-gray-600">
+      <div class="login-link">
+        <p class="login-text">
           Already have an account?
           <button
             @click="goToLogin"
-            class="text-purple-600 hover:text-purple-700 font-medium transition duration-200"
+            class="login-button-link"
           >
             Sign in here
           </button>
@@ -163,14 +163,181 @@ const goToLogin = () => {
       </div>
 
       <!-- Back to Home -->
-      <div class="text-center mt-4">
+      <div class="back-link">
         <button
           @click="router.push('/')"
-          class="text-gray-500 hover:text-gray-700 text-sm transition duration-200"
+          class="back-button"
         >
           ← Back to Resume Analyzer
         </button>
       </div>
     </div>
   </div>
-</template> 
+</template>
+
+<style scoped>
+.signup-container {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.signup-card {
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+  padding: 3rem;
+  width: 100%;
+  max-width: 450px;
+}
+
+.signup-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.signup-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2d3748;
+  margin-bottom: 0.5rem;
+}
+
+.signup-subtitle {
+  color: #718096;
+  font-size: 1.1rem;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-label {
+  font-weight: 600;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.form-input {
+  padding: 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #f8fafc;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.error-message {
+  background: #fed7d7;
+  color: #c53030;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: 1px solid #feb2b2;
+}
+
+.success-message {
+  background: #c6f6d5;
+  color: #2f855a;
+  padding: 1rem;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  border: 1px solid #9ae6b4;
+}
+
+.signup-button {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 1rem;
+}
+
+.signup-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(102, 126, 234, 0.3);
+}
+
+.signup-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.login-text {
+  color: #718096;
+  font-size: 1rem;
+}
+
+.login-button-link {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-weight: 600;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin-left: 0.5rem;
+}
+
+.login-button-link:hover {
+  color: #5a67d8;
+  text-decoration: underline;
+}
+
+.back-link {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #a0aec0;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.back-button:hover {
+  color: #4a5568;
+}
+
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 2rem;
+    margin: 1rem;
+  }
+  
+  .signup-title {
+    font-size: 2rem;
+  }
+}
+</style> 

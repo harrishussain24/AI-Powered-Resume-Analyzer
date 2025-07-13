@@ -111,10 +111,10 @@ const deleteFile = (index) => {
   <!-- Main Content -->
   <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow relative">
     <!-- Login Button - Top Right Corner -->
-    <div class="absolute top-6 right-6">
+    <div class="login-button-container">
       <button
         @click="router.push('/login')"
-        class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition duration-200 shadow-md"
+        class="login-button-main"
       >
         Login
       </button>
@@ -761,5 +761,39 @@ const deleteFile = (index) => {
 @keyframes shimmer {
   0% { transform: translateX(-100%); }
   100% { transform: translateX(100%); }
+}
+
+/* Login Button Styles */
+.login-button-container {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+.login-button-main {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.login-button-main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+}
+
+.login-button-main:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(102, 126, 234, 0.3);
 }
 </style>
