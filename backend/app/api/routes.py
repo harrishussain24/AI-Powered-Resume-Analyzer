@@ -103,12 +103,39 @@ class MatchRequest(BaseModel):
     resume: dict
     job: dict
 
+@router.get("/test-match")
+async def test_match():
+    """Simple test endpoint to check if matching service is working"""
+    try:
+        # Test with dummy data
+        test_resume = {
+            "skills": ["Python", "JavaScript"],
+            "experience": [{"bullets": ["Developed web applications"]}]
+        }
+        test_job = {
+            "skills": ["Python", "React"],
+            "description": "Software developer position"
+        }
+        
+        result = match_resume_to_job(test_resume, test_job)
+        return {"status": "success", "test_result": result}
+    except Exception as e:
+        return {"status": "error", "error": str(e)}
+
 @router.post("/match")
 async def match_resume_job(data: MatchRequest):
     if not data.resume or not data.job:
         raise HTTPException(status_code=status.HTTP_422_UNPROCESSABLE_ENTITY, detail="Resume and job data must be provided.")
+    
+    print(f"🔍 Received match request - Resume keys: {list(data.resume.keys()) if data.resume else 'None'}")
+    print(f"🔍 Received match request - Job keys: {list(data.job.keys()) if data.job else 'None'}")
+    
     try:
         result = match_resume_to_job(data.resume, data.job)
+        print(f"✅ Match result: {result}")
         return {"status": "success", "match": result}
     except Exception as e:
+        print(f"❌ Match error: {str(e)}")
+        import traceback
+        traceback.print_exc()
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=f"Failed to match resume to job: {str(e)}")

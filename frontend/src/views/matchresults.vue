@@ -52,9 +52,39 @@ onMounted(async () => {
 
     console.log('🔍 Sending match request:', requestData)
 
-    const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/match', requestData, {
-      timeout: 30000 // 30 second timeout
-    })
+    // First try the test endpoint to see if backend is working
+    try {
+      const testResponse = await axios.get('https://ai-powered-resume-analyzer-u0hx.onrender.com/test-match', {
+        timeout: 10000
+      })
+      console.log('✅ Backend test successful:', testResponse.data)
+    } catch (testErr) {
+      console.warn('⚠️ Backend test failed:', testErr.message)
+    }
+
+    // Retry mechanism for the match request
+    let response
+    let retryCount = 0
+    const maxRetries = 2
+    
+    while (retryCount <= maxRetries) {
+      try {
+        response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/match', requestData, {
+          timeout: 30000 // 30 second timeout
+        })
+        break // Success, exit retry loop
+      } catch (retryErr) {
+        retryCount++
+        console.warn(`⚠️ Attempt ${retryCount} failed:`, retryErr.message)
+        
+        if (retryCount > maxRetries) {
+          throw retryErr // Re-throw the last error
+        }
+        
+        // Wait before retrying (exponential backoff)
+        await new Promise(resolve => setTimeout(resolve, 1000 * retryCount))
+      }
+    }
 
     clearInterval(progressInterval)
     matchProgress.value = 100

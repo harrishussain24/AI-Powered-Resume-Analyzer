@@ -1,17 +1,12 @@
 import re
-import torch
-from sentence_transformers import SentenceTransformer, util
 from rapidfuzz import fuzz, process
+from difflib import SequenceMatcher
 
-# Lazy load model to save memory
-_model = None
-
-def get_model():
-    global _model
-    if _model is None:
-        # Use smaller model for memory efficiency
-        _model = SentenceTransformer('all-MiniLM-L6-v2', device='cpu')
-    return _model
+def text_similarity(text1, text2):
+    """Simple text similarity without ML models"""
+    if not text1 or not text2:
+        return 0.0
+    return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
 
 def fuzzy_skill_match(resume_skills, job_skills, threshold=80):
     """
@@ -37,7 +32,7 @@ def match_resume_to_job(resume: dict, job: dict) -> dict:
         bullets = entry.get("bullets", [])
         all_bullets.extend(bullets)
 
-    # Join all bullets to a single string (fallback)
+    # Join all bullets to a single string
     resume_experience_text = " ".join(all_bullets).lower()
 
     # Lowercase job description text
@@ -50,20 +45,9 @@ def match_resume_to_job(resume: dict, job: dict) -> dict:
     # Calculate missing skills
     missing_skills = list(job_skills - matched_skills)
 
-    # Experience semantic similarity
-    if all_bullets and job_description.strip():
-        model = get_model()
-        embeddings_resume = model.encode(all_bullets, convert_to_tensor=True, device='cpu')
-        avg_embedding_resume = torch.mean(embeddings_resume, dim=0)
-        embeddings_job = model.encode(job_description, convert_to_tensor=True, device='cpu')
-        cosine_score = util.pytorch_cos_sim(avg_embedding_resume, embeddings_job)
-        experience_match_score = round(float(cosine_score.item()), 2)
-    elif resume_experience_text.strip() and job_description.strip():
-        model = get_model()
-        embeddings_resume = model.encode(resume_experience_text, convert_to_tensor=True, device='cpu')
-        embeddings_job = model.encode(job_description, convert_to_tensor=True, device='cpu')
-        cosine_score = util.pytorch_cos_sim(embeddings_resume, embeddings_job)
-        experience_match_score = round(float(cosine_score.item()), 2)
+    # Experience similarity using lightweight text comparison
+    if resume_experience_text.strip() and job_description.strip():
+        experience_match_score = round(text_similarity(resume_experience_text, job_description), 2)
     else:
         experience_match_score = 0.0
 
