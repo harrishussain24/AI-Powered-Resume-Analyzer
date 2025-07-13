@@ -16,7 +16,36 @@ const uploadedFiles = ref([])
 const uploadProgress = ref(0)
 const uploadStage = ref('')
 const showProgress = ref(false)
+const user = ref(null)
 isSubmitting.value = false
+
+// Check if user is logged in
+const checkAuthStatus = () => {
+  const authToken = localStorage.getItem('authToken')
+  const userData = localStorage.getItem('user')
+  
+  if (authToken && userData) {
+    try {
+      user.value = JSON.parse(userData)
+    } catch (e) {
+      // Clear invalid data
+      localStorage.removeItem('authToken')
+      localStorage.removeItem('user')
+      user.value = null
+    }
+  } else {
+    user.value = null
+  }
+}
+
+const logout = () => {
+  localStorage.removeItem('authToken')
+  localStorage.removeItem('user')
+  user.value = null
+}
+
+// Check auth status on component mount
+checkAuthStatus()
 
 const goToJobDescriptionView = () => {
   if (!resumeData.value) return
@@ -110,14 +139,24 @@ const deleteFile = (index) => {
 <template>
   <!-- Main Content -->
   <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow relative">
-    <!-- Login Button - Top Right Corner -->
-    <div class="login-button-container">
-      <button
-        @click="router.push('/login')"
-        class="login-button-main"
-      >
-        Login / Signup
-      </button>
+    <!-- Auth Section - Top Right Corner -->
+    <div class="auth-container">
+      <!-- Show user info when logged in -->
+      <div v-if="user" class="user-info">
+        <span class="user-name">Welcome, {{ user.name || user.email }}</span>
+        <button @click="logout" class="logout-button">
+          Logout
+        </button>
+      </div>
+      <!-- Show login button when not logged in -->
+      <div v-else class="login-button-container">
+        <button
+          @click="router.push('/login')"
+          class="login-button-main"
+        >
+          Login / Signup
+        </button>
+      </div>
     </div>
 
     <!-- Heading Section -->
@@ -765,16 +804,59 @@ const deleteFile = (index) => {
   100% { transform: translateX(100%); }
 }
 
+/* Auth Section Styles */
+.auth-container {
+  position: absolute;
+  top: 2.5rem;
+  right: 1.5rem;
+  z-index: 10;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid #48AAAD;
+}
+
+.user-name {
+  color: #016064;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.logout-button {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
+}
+
 /* Login Button Styles */
 .login-button-container {
   position: absolute;
-  top: 1.5rem;
+  top: 2.5rem;
   right: 1.5rem;
   z-index: 10;
 }
 
 .login-button-main {
-  background: linear-gradient(135deg, #016064 0%, #48AAAD 100%);
+  background: linear-gradient(135deg, #48AAAD 0%, #016064 100%);
   color: white;
   padding: 0.75rem 1.5rem;
   border: none;
@@ -791,7 +873,7 @@ const deleteFile = (index) => {
 .login-button-main:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
-  background: linear-gradient(135deg, #014d50 0%, #3a8a8d 100%);
+  background: linear-gradient(135deg, #3a8a8d 0%, #014d50 100%);
 }
 
 .login-button-main:active {
