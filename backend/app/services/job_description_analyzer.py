@@ -1,7 +1,7 @@
 import spacy
 from spacy.matcher import PhraseMatcher
 import re
-from app.services.skills_list import skills_list
+from services.skills_list import skills_list
 
 nlp = spacy.load("en_core_web_sm")
 

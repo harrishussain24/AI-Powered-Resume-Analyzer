@@ -109,7 +109,17 @@ const deleteFile = (index) => {
 
 <template>
   <!-- Main Content -->
-  <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow">
+  <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow relative">
+    <!-- Login Button - Top Right Corner -->
+    <div class="absolute top-6 right-6">
+      <button
+        @click="router.push('/login')"
+        class="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-2 rounded-lg font-medium hover:from-purple-700 hover:to-pink-700 transition duration-200 shadow-md"
+      >
+        Login
+      </button>
+    </div>
+
     <!-- Heading Section -->
     <div class="mb-8 heading-section">
       <h2 class="text-3xl font-bold text-gray-800 mb-4 ml-8">Upload Your Resume</h2>

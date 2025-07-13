@@ -1,7 +1,8 @@
 from fastapi import FastAPI
-from app.api.routes import router
-from app.models.session import init_db
+from api.routes import router as core_router
+from models.session import init_db
 from fastapi.middleware.cors import CORSMiddleware
+from api.authroutes import router as auth_router
 import os
 
 # Only load dotenv locally
@@ -10,6 +11,9 @@ if os.getenv("ENV") != "production":
     load_dotenv()
 
 app = FastAPI()
+
+app.include_router(core_router)
+app.include_router(auth_router)
 
 app.add_middleware(
     CORSMiddleware,
@@ -42,4 +46,3 @@ async def health_check():
 async def test_endpoint():
     return {"message": "Backend is working!", "timestamp": "2024-01-01"}
 
-app.include_router(router)
