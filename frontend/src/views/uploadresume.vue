@@ -302,7 +302,7 @@ const deleteFile = (index) => {
   align-items: flex-start;
   justify-content: space-between;
   background: #016064;
-  border-radius: 1.25rem;
+  /*border-radius: 1.25rem;*/
   padding: 1.5rem 2.5rem 1.5rem 2.5rem;
   margin-bottom: 2rem;
   margin-top: 0;
