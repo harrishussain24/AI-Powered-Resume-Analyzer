@@ -4,7 +4,7 @@ from app.models.session import init_db
 from fastapi.middleware.cors import CORSMiddleware
 import os
 
-# Only load dotenv locally if you want
+# Only load dotenv locally
 if os.getenv("ENV") != "production":
     from dotenv import load_dotenv
     load_dotenv()
@@ -19,8 +19,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-@app.on_event("startup")
-async def on_startup():
+@app.get("/init")
+async def manual_init():
     await init_db()
+    return {"message": "DB initialized"}
+
+@app.get("/health")
+async def health_check():
+    return {"status": "ok"}
 
 app.include_router(router)
