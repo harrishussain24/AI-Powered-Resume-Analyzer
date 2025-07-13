@@ -1,18 +1,19 @@
 from fastapi import FastAPI
 from app.api.routes import router
 from app.models.session import init_db
-from dotenv import load_dotenv
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
-
-
-load_dotenv()
+# Only load dotenv locally if you want
+if os.getenv("ENV") != "production":
+    from dotenv import load_dotenv
+    load_dotenv()
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # or ["http://localhost:5173"]
+    allow_origins=["*"],  # Adjust origins as needed
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
