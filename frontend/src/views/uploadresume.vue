@@ -139,31 +139,33 @@ const deleteFile = (index) => {
 <template>
   <!-- Main Content -->
   <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow relative">
-    <!-- Auth Section - Top Right Corner -->
-    <div class="auth-container">
-      <!-- Show user info when logged in -->
-      <div v-if="user" class="user-info">
-        <span class="user-name">Welcome, {{ user.name || user.email }}</span>
-        <button @click="logout" class="logout-button">
-          Logout
-        </button>
+    <!-- Heading and Auth Section in Flex Row -->
+    <div class="header-auth-row">
+      <div class="heading-section mb-0">
+        <h2 class="text-3xl font-bold text-gray-800 mb-0 ml-0">Upload Your Resume</h2>
       </div>
-      <!-- Show login button when not logged in -->
-      <div v-else class="login-button-container">
-        <button
-          @click="router.push('/login')"
-          class="login-button-main"
-        >
-          Login / Signup
-        </button>
+      <!-- Auth Section -->
+      <div class="auth-container-static">
+        <!-- Show user info when logged in -->
+        <div v-if="user" class="user-info">
+          <span class="user-name">Welcome, {{ user.name || user.email }}</span>
+          <button @click="logout" class="logout-button">
+            Logout
+          </button>
+        </div>
+        <!-- Show login button when not logged in -->
+        <div v-else class="login-button-container-static">
+          <button
+            @click="router.push('/login')"
+            class="login-button-main-static"
+          >
+            Login / Signup
+          </button>
+        </div>
       </div>
     </div>
 
-    <!-- Heading Section -->
-    <div class="mb-8 heading-section">
-      <h2 class="text-3xl font-bold text-gray-800 mb-4 ml-8">Upload Your Resume</h2>
-      <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 ml-8 mr-8"></div>
-    </div>
+    <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 ml-8 mr-8 mb-8"></div>
 
     <div class="upload-area" @click="triggerFileSelect">
       <span class="upload-icon">📄</span>
@@ -300,14 +302,86 @@ const deleteFile = (index) => {
 </template>
 
 <style scoped>
+.header-auth-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
 .heading-section {
   background-color: #016064;
   color: white;
-  padding: 1rem 1.5rem;
-  width: 100vw;
-  margin-bottom: 2rem;
-  margin-left: calc(-50vw + 50%);
-  margin-top: -1.5rem;
+  padding: 1.25rem 2.5rem;
+  border-radius: 1rem;
+  margin: 0;
+  width: auto;
+  display: flex;
+  align-items: center;
+}
+.auth-container-static {
+  display: flex;
+  align-items: center;
+  margin-left: 2rem;
+}
+.login-button-container-static {
+  display: flex;
+  align-items: center;
+}
+.login-button-main-static {
+  background: linear-gradient(135deg, #48AAAD 0%, #016064 100%);
+  color: white;
+  padding: 0.85rem 2.5rem;
+  min-width: 160px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(1, 96, 100, 0.3);
+  text-decoration: none;
+  display: inline-block;
+}
+.login-button-main-static:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
+  background: linear-gradient(135deg, #3a8a8d 0%, #014d50 100%);
+}
+.login-button-main-static:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 10px rgba(1, 96, 100, 0.3);
+}
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid #48AAAD;
+}
+.user-name {
+  color: #016064;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+.logout-button {
+  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.logout-button:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
+  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
 }
 .upload-area {
   background: #fff;
