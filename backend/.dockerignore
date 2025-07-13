@@ -1,69 +1,38 @@
-# Logs and database files
-*.log
-*.sqlite3
-*.db
-
-# Python cache and bytecode
-__pycache__/
-*.py[cod]
+__pycache__
+*.pyc
 *.pyo
 *.pyd
-
-# Virtual environments
-.venv/
+.Python
+env
+pip-log.txt
+pip-delete-this-directory.txt
+.tox
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.log
+.git
+.mypy_cache
+.pytest_cache
+.hypothesis
+.env
+.venv
 venv/
 ENV/
 env/
-.Python
-
-# dotenv files (secrets should NOT be copied into the image)
-.env
-.env.*
-*.flaskenv
-
-# Build and packaging
+.venv/
 *.egg-info/
-dist/
-build/
-
-# Docker and system junk
-Dockerfile
-docker-compose.yml
+.installed.cfg
+*.egg
+MANIFEST
 .DS_Store
-
-# VS Code and IDEs
-.vscode/
-.idea/
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Node (if accidentally present or from frontend build)
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
-
-# Frontend build artifacts (if fullstack)
-frontend/node_modules/
-frontend/dist/
-dist-ssr/
-*.local
-
-# Specific data files
-*.csv
-*.tsv
-survey_results_public.csv
-
-# Git history
-.git
-
-# Tests folder
-app/tests/
-
-
-frontend/
+*.swp
+*.swo
+*~
+tests/
+test_*
+README.md
+.gitignore

@@ -1,6 +1,6 @@
 FROM python:3.11-slim
 
-# System dependencies (slimmed)
+# Install only necessary system dependencies
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
@@ -12,14 +12,10 @@ WORKDIR /app
 # Copy requirements first for better caching
 COPY requirements.txt .
 
-# Install torch first with the extra index (CPU only for memory efficiency)
-RUN pip install --no-cache-dir torch==2.2.0+cpu --extra-index-url https://download.pytorch.org/whl/cpu
-
-# Install the rest of the requirements
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Download spaCy model
-RUN python -m spacy download en_core_web_sm
+# Install Python dependencies
+RUN pip install --no-cache-dir torch==2.2.0 --extra-index-url https://download.pytorch.org/whl/cpu && \
+    pip install --no-cache-dir -r requirements.txt && \
+    python -m spacy download en_core_web_sm
 
 # Copy application code
 COPY . .
