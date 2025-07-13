@@ -48,7 +48,7 @@ const handleSubmit = async () => {
     const formData = new FormData()
     formData.append('file', selectedFile.value)
 
-    const response = await axios.post('http://127.0.0.1:8000/upload-resume/', formData)
+    const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/upload-resume/', formData)
 
     resumeData.value = response.data
     uploadedFiles.value = [{

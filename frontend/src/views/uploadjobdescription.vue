@@ -18,7 +18,7 @@ const analyzeJobDescription = async () => {
   error.value = null
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/analyze-job', {
+    const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/analyze-job', {
       description: jobDescription.value
     })
 

@@ -21,7 +21,7 @@ onMounted(async () => {
   console.log('📝 Job description being sent:', jobDesc)
 
   try {
-    const response = await axios.post('http://127.0.0.1:8000/match', {
+    const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/match', {
       resume: resume.analysis,
       job: jobDesc.analysis || jobDesc,
     })
