@@ -1,37 +1,66 @@
-# Logs
-logs
+# Logs and database files
 *.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-pnpm-debug.log*
-lerna-debug.log*
+*.sqlite3
+*.db
 
-node_modules
-dist
-dist-ssr
-*.local
+# Python cache and bytecode
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+.Python
+
+# dotenv files (secrets should NOT be copied into the image)
+.env
+.env.*
+*.flaskenv
+
+# Build and packaging
+*.egg-info/
+dist/
+build/
+
+# Docker and system junk
+Dockerfile
+docker-compose.yml
 .DS_Store
+
+# VS Code and IDEs
+.vscode/
+.idea/
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
 *.sw?
 
+# Node (if accidentally present or from frontend build)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
 
-# Python virtual environments
-venv/
-.flaskenv/
-.env/
-__pycache__/
+# Frontend build artifacts (if fullstack)
+frontend/node_modules/
+frontend/dist/
+dist-ssr/
+*.local
 
-
-backend/.env
-
-survey_results_public.csv
+# Specific data files
 *.csv
+*.tsv
+survey_results_public.csv
+
+# Git history
+.git
+
+# Tests folder
+app/tests/
