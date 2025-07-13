@@ -10,22 +10,52 @@ const router = useRouter()
 const jobDescription = ref('')
 const isSubmitting = ref(false)
 const error = ref(null)
+const analysisProgress = ref(0)
+const analysisStage = ref('')
+const showProgress = ref(false)
 
 const analyzeJobDescription = async () => {
   if (!jobDescription.value.trim()) return
 
   isSubmitting.value = true
+  showProgress.value = true
   error.value = null
+  analysisProgress.value = 0
+  analysisStage.value = 'Preparing analysis...'
 
   try {
+    // Simulate analysis progress
+    const progressInterval = setInterval(() => {
+      if (analysisProgress.value < 90) {
+        analysisProgress.value += Math.random() * 20
+        if (analysisProgress.value < 40) {
+          analysisStage.value = 'Extracting job details...'
+        } else if (analysisProgress.value < 70) {
+          analysisStage.value = 'Identifying required skills...'
+        } else if (analysisProgress.value < 90) {
+          analysisStage.value = 'Analyzing requirements...'
+        }
+      }
+    }, 150)
+
     const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/analyze-job', {
       description: jobDescription.value
     })
+
+    clearInterval(progressInterval)
+    analysisProgress.value = 100
+    analysisStage.value = 'Analysis complete!'
+
+    // Small delay to show completion
+    setTimeout(() => {
+      showProgress.value = false
+    }, 1000)
 
     store.setJobDescription(response.data)
     // Don't navigate to next page, just store the result
   } catch (err) {
     error.value = err.response?.data?.message || err.message
+    showProgress.value = false
   } finally {
     isSubmitting.value = false
   }
@@ -44,6 +74,29 @@ const showFinalResults = () => {
     <div class="heading-section">
       <h2 class="text-3xl font-bold text-gray-800 mb-4 ml-8">Upload Job Description</h2>
       <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 ml-8 mr-8"></div>
+    </div>
+
+    <!-- Progress Indicator -->
+    <div v-if="showProgress" class="progress-container">
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="progress-icon">🔍</div>
+          <h3 class="progress-title">Analyzing Job Description</h3>
+        </div>
+        
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: analysisProgress + '%' }"></div>
+          </div>
+          <div class="progress-text">{{ Math.round(analysisProgress) }}%</div>
+        </div>
+        
+        <div class="progress-stage">{{ analysisStage }}</div>
+        
+        <div class="progress-spinner">
+          <div class="spinner"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Job Description Input Section -->
@@ -476,5 +529,123 @@ const showFinalResults = () => {
 
 .continue-button:hover .button-icon {
   transform: translateX(4px);
+}
+
+/* Progress Indicator Styles */
+.progress-container {
+  width: 80%;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  border: 2px solid #016064;
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.progress-icon {
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+.progress-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #016064;
+  margin: 0;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #016064, #48AAAD);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.progress-text {
+  font-weight: 600;
+  color: #016064;
+  min-width: 50px;
+  font-size: 1.1rem;
+}
+
+.progress-stage {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.progress-spinner {
+  display: flex;
+  justify-content: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #016064;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
 </style>

@@ -9,22 +9,61 @@ const jobDesc = store.jobDescriptionData
 
 const matchResult = ref(null)
 const error = ref(null)
+const isLoading = ref(true)
+const matchProgress = ref(0)
+const matchStage = ref('')
+const showProgress = ref(false)
 
 onMounted(async () => {
   if (!resume?.analysis || !jobDesc) {
     error.value = 'Missing resume or job description data.'
     console.warn('❌ resume or job description is missing')
+    isLoading.value = false
     return
   }
 
   console.log('📄 Resume data being sent:', resume.analysis)
   console.log('📝 Job description being sent:', jobDesc)
 
+  showProgress.value = true
+  matchProgress.value = 0
+  matchStage.value = 'Preparing analysis...'
+
   try {
-    const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/match', {
+    // Simulate matching progress
+    const progressInterval = setInterval(() => {
+      if (matchProgress.value < 90) {
+        matchProgress.value += Math.random() * 20
+        if (matchProgress.value < 30) {
+          matchStage.value = 'Comparing skills...'
+        } else if (matchProgress.value < 60) {
+          matchStage.value = 'Analyzing experience...'
+        } else if (matchProgress.value < 90) {
+          matchStage.value = 'Calculating match score...'
+        }
+      }
+    }, 150)
+
+    // Prepare the data properly
+    const requestData = {
       resume: resume.analysis,
-      job: jobDesc.analysis || jobDesc,
+      job: jobDesc.analysis || jobDesc
+    }
+
+    console.log('🔍 Sending match request:', requestData)
+
+    const response = await axios.post('https://ai-powered-resume-analyzer-u0hx.onrender.com/match', requestData, {
+      timeout: 30000 // 30 second timeout
     })
+
+    clearInterval(progressInterval)
+    matchProgress.value = 100
+    matchStage.value = 'Analysis complete!'
+
+    // Small delay to show completion
+    setTimeout(() => {
+      showProgress.value = false
+    }, 1000)
 
     if (response.data.match) {
       matchResult.value = response.data.match
@@ -34,8 +73,19 @@ onMounted(async () => {
       console.error('❌ API error:', response.data)
     }
   } catch (err) {
-    error.value = err.response?.data?.message || err.message
     console.error('❌ Network error:', err)
+    if (err.code === 'ECONNABORTED') {
+      error.value = 'Request timed out. Please try again.'
+    } else if (err.response?.status === 500) {
+      error.value = 'Server error. Please try again later.'
+    } else if (err.response?.status === 422) {
+      error.value = 'Invalid data format. Please check your resume and job description.'
+    } else {
+      error.value = err.response?.data?.detail || err.message || 'Network error occurred.'
+    }
+    showProgress.value = false
+  } finally {
+    isLoading.value = false
   }
 })
 </script>
@@ -400,6 +450,119 @@ onMounted(async () => {
   line-height: 1.6;
   margin: 0;
 }
+
+/* Progress Indicator Styles */
+.progress-container {
+  width: 80%;
+  margin: 2rem auto;
+  display: flex;
+  justify-content: center;
+}
+
+.progress-card {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  border: 2px solid #016064;
+}
+
+.progress-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.progress-icon {
+  font-size: 2rem;
+  animation: bounce 2s infinite;
+}
+
+.progress-title {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #016064;
+  margin: 0;
+}
+
+.progress-bar-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.progress-bar {
+  flex: 1;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #016064, #48AAAD);
+  border-radius: 6px;
+  transition: width 0.3s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: shimmer 2s infinite;
+}
+
+.progress-text {
+  font-weight: 600;
+  color: #016064;
+  min-width: 50px;
+  font-size: 1.1rem;
+}
+
+.progress-stage {
+  color: #6b7280;
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+}
+
+.progress-spinner {
+  display: flex;
+  justify-content: center;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e5e7eb;
+  border-top: 4px solid #016064;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-10px); }
+  60% { transform: translateY(-5px); }
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
 </style>
 
 <template>
@@ -411,8 +574,31 @@ onMounted(async () => {
       <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 ml-8 mr-8"></div>
     </div>
 
+    <!-- Progress Indicator -->
+    <div v-if="showProgress" class="progress-container">
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="progress-icon">🎯</div>
+          <h3 class="progress-title">Matching Resume to Job</h3>
+        </div>
+        
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: matchProgress + '%' }"></div>
+          </div>
+          <div class="progress-text">{{ Math.round(matchProgress) }}%</div>
+        </div>
+        
+        <div class="progress-stage">{{ matchStage }}</div>
+        
+        <div class="progress-spinner">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
     <!-- Loading State -->
-    <div v-if="!matchResult && !error" class="loading-container">
+    <div v-if="!matchResult && !error && !showProgress" class="loading-container">
       <div class="loading-spinner"></div>
       <p class="loading-text">Analyzing your resume against the job description...</p>
     </div>
