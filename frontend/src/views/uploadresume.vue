@@ -309,7 +309,7 @@ const deleteFile = (index) => {
 }
 .header-title {
   color: white;
-  font-size: 2.25rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin: 0;
   padding: 0;

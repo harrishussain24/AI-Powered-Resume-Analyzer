@@ -245,6 +245,29 @@ const goToLogin = () => {
   box-shadow: 0 0 0 3px rgba(72, 170, 173, 0.1);
 }
 
+input[type='file'],
+input[type='text'],
+input[type='email'],
+input[type='password'] {
+  background: #fff !important;
+  color: #016064 !important;
+  border: 2px solid #48AAAD;
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-size: 1rem;
+  margin: 0.25rem 0;
+  box-shadow: 0 2px 8px rgba(1,96,100,0.04);
+}
+
+input[type='file']:focus,
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus {
+  outline: none;
+  border-color: #016064;
+  background: #f4f8f8;
+}
+
 .error-message {
   background: #fed7d7;
   color: #c53030;
