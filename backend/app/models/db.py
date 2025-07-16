@@ -12,6 +12,7 @@ class Resume(Base):
     content = Column(Text, nullable=False)  # full raw text of resume
     parsed_data = Column(Text, nullable=True)  # JSON string of parsed analysis
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+    file_url = Column(String, nullable=True)
 
 
 class JobDescription(Base):
