@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-import '../assets/login.css'
+// import '../assets/login.css'
 
 const router = useRouter()
 const email = ref('')
@@ -50,85 +50,70 @@ const goToSignup = () => {
 </script>
 
 <template>
-  <div class="login-container">
-    <div class="login-card">
+  <div class="min-h-screen bg-gradient-to-br from-[#016064] to-[#48AAAD] flex items-center justify-center p-4">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
       <!-- Header -->
-      <div class="login-header">
-        <h1 class="login-title">Welcome Back</h1>
-        <p class="login-subtitle">Sign in to your account</p>
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
+        <p class="text-gray-600">Sign in to your account</p>
       </div>
-
       <!-- Login Form -->
-      <form @submit.prevent="handleLogin" class="login-form">
+      <form @submit.prevent="handleLogin" class="flex flex-col gap-6">
         <!-- Email Field -->
-        <div class="form-group">
-          <label for="email" class="form-label">
-            Email Address
-          </label>
+        <div class="flex flex-col gap-2">
+          <label for="email" class="font-semibold text-gray-700 text-sm">Email Address</label>
           <input
             id="email"
             v-model="email"
             type="email"
             required
-            class="form-input"
+            class="w-full px-4 py-3 border-2 border-[#48AAAD] rounded-lg focus:ring-2 focus:ring-[#016064] focus:border-[#016064] transition text-[#016064] bg-white placeholder-gray-400"
             placeholder="Enter your email"
           />
         </div>
-
         <!-- Password Field -->
-        <div class="form-group">
-          <label for="password" class="form-label">
-            Password
-          </label>
+        <div class="flex flex-col gap-2">
+          <label for="password" class="font-semibold text-gray-700 text-sm">Password</label>
           <input
             id="password"
             v-model="password"
             type="password"
             required
-            class="form-input"
+            class="w-full px-4 py-3 border-2 border-[#48AAAD] rounded-lg focus:ring-2 focus:ring-[#016064] focus:border-[#016064] transition text-[#016064] bg-white placeholder-gray-400"
             placeholder="Enter your password"
           />
         </div>
-
         <!-- Error Message -->
-        <div v-if="error" class="error-message">
-          ❌ {{ error }}
-        </div>
-
+        <div v-if="error" class="text-red-600 text-sm bg-red-50 p-3 rounded-lg">❌ {{ error }}</div>
         <!-- Success Message -->
-        <div v-if="success" class="success-message">
-          ✅ {{ success }}
-        </div>
-
+        <div v-if="success" class="text-green-600 text-sm bg-green-50 p-3 rounded-lg">✅ {{ success }}</div>
         <!-- Login Button -->
         <button
           type="submit"
           :disabled="isLoggingIn"
-          class="login-button"
+          class="w-full bg-gradient-to-r from-[#016064] to-[#48AAAD] text-white py-3 px-4 rounded-lg font-medium hover:from-[#014d50] hover:to-[#3a8a8d] focus:ring-2 focus:ring-[#016064] focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed mt-2"
         >
           <span v-if="isLoggingIn">Signing in...</span>
           <span v-else>Sign In</span>
         </button>
       </form>
-
       <!-- Sign Up Link -->
-      <div class="signup-link">
-        <p class="signup-text">
+      <div class="text-center mt-6">
+        <p class="text-gray-600">
           Don't have an account?
           <button
             @click="goToSignup"
-            class="signup-button"
+            class="text-[#48AAAD] hover:text-[#016064] font-medium transition ml-1"
           >
             Sign up here
           </button>
         </p>
       </div>
-
       <!-- Back to Home -->
-      <div class="back-link">
+      <div class="text-center mt-4">
         <button
           @click="router.push('/')"
-          class="back-button"
+          class="text-gray-500 hover:text-gray-700 text-sm transition"
         >
           ← Back to Resume Analyzer
         </button>

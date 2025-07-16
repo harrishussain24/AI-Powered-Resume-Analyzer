@@ -3,6 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useResumeStore } from '../stores/parseddatastore'
 import axios from 'axios'
+// import '../assets/uploadresume.css'  // Remove custom CSS import
 
 const resumeStore = useResumeStore()
 const router = useRouter()
@@ -140,19 +141,19 @@ const deleteFile = (index) => {
   <!-- Main Content -->
   <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow relative">
     <!-- Header Bar: Heading and Auth Button -->
-    <div class="header-bar">
-      <h2 class="header-title">Upload Your Resume</h2>
-      <div class="auth-container-bar">
-        <div v-if="user" class="user-info">
-          <span class="user-name">Welcome, {{ user.name || user.email }}</span>
-          <button @click="logout" class="logout-button">
+    <div class="flex items-start justify-between bg-[#016064] px-10 py-6 mb-8 rounded-xl">
+      <h2 class="text-white text-3xl font-bold tracking-tight m-0 p-0">Upload Your Resume</h2>
+      <div class="flex items-start">
+        <div v-if="user" class="flex items-center gap-3 bg-white px-4 py-2 rounded-lg shadow border-2 border-[#48AAAD] mt-1 mr-1">
+          <span class="text-[#016064] font-semibold text-base">Welcome, {{ user.name || user.email }}</span>
+          <button @click="logout" class="bg-gradient-to-r from-red-600 to-red-400 text-white px-3 py-1.5 rounded-md text-sm font-semibold transition hover:from-red-700 hover:to-red-500 shadow">
             Logout
           </button>
         </div>
-        <div v-else class="login-button-container-bar">
+        <div v-else class="flex items-center mt-1 mr-1">
           <button
             @click="router.push('/login')"
-            class="login-button-main-bar"
+            class="bg-gradient-to-r from-[#48AAAD] to-[#016064] text-white px-8 py-3 min-w-[170px] rounded-lg text-lg font-semibold shadow transition hover:from-[#3a8a8d] hover:to-[#014d50]"
           >
             Login / Signup
           </button>
@@ -162,119 +163,108 @@ const deleteFile = (index) => {
 
     <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 ml-8 mr-8 mb-8"></div>
 
-    <div class="upload-area" @click="triggerFileSelect">
-      <span class="upload-icon">📄</span>
-      <div class="upload-text">Click here to upload your file or drag.</div>
-      <span class="upload-link">Supported Format: <u>PDF (5mb max)</u></span>
+    <div class="flex flex-col items-center justify-center bg-white border-2 border-[#48AAAD] rounded-2xl shadow-md py-12 px-8 mb-8 w-4/5 mx-auto cursor-pointer transition hover:border-[#016064] hover:shadow-lg" @click="triggerFileSelect">
+      <span class="text-5xl text-[#a084e8] mb-4">📄</span>
+      <div class="text-[#6c6f93] text-lg mb-2">Click here to upload your file or drag.</div>
+      <span class="text-[#48AAAD] font-semibold cursor-pointer transition hover:text-[#016064]">Supported Format: <u>PDF (5mb max)</u></span>
     </div>
 
     <input type="file" accept=".pdf" ref="fileInput" @change="handleFileChange" class="hidden" />
 
     <!-- Progress Indicator -->
-    <div v-if="showProgress" class="progress-container">
-      <div class="progress-card">
-        <div class="progress-header">
-          <div class="progress-icon">📄</div>
-          <h3 class="progress-title">Processing Resume</h3>
+    <div v-if="showProgress" class="flex justify-center w-4/5 mx-auto my-8">
+      <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-xl text-center border-2 border-[#016064]">
+        <div class="flex items-center justify-center gap-4 mb-6">
+          <div class="text-3xl animate-bounce">📄</div>
+          <h3 class="text-xl font-semibold text-[#016064] m-0">Processing Resume</h3>
         </div>
-        
-        <div class="progress-bar-container">
-          <div class="progress-bar">
-            <div class="progress-fill" :style="{ width: uploadProgress + '%' }"></div>
+        <div class="flex items-center gap-4 mb-4">
+          <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden relative">
+            <div class="h-full bg-gradient-to-r from-[#016064] to-[#48AAAD] rounded-full transition-all duration-300" :style="{ width: uploadProgress + '%' }"></div>
           </div>
-          <div class="progress-text">{{ Math.round(uploadProgress) }}%</div>
+          <div class="font-semibold text-[#016064] min-w-[50px] text-lg">{{ Math.round(uploadProgress) }}%</div>
         </div>
-        
-        <div class="progress-stage">{{ uploadStage }}</div>
-        
-        <div class="progress-spinner">
-          <div class="spinner"></div>
+        <div class="text-gray-500 text-base font-medium mb-6">{{ uploadStage }}</div>
+        <div class="flex justify-center">
+          <div class="w-10 h-10 border-4 border-gray-200 border-t-[#016064] rounded-full animate-spin"></div>
         </div>
       </div>
     </div>
 
-    <div class="attached-files-container">
-      <div class="attached-files-header">
-        <h2 class="attached-files-title">Attached File</h2>
-        <p class="attached-files-subtitle">Here you can see your uploaded file</p>
+    <!-- Attached Files Section -->
+    <div class="w-4/5 mx-auto my-8 bg-white rounded-lg shadow overflow-hidden">
+      <div class="px-8 pt-6 pb-2">
+        <h2 class="text-xl font-semibold text-[#016064] mb-1">Attached File</h2>
+        <p class="text-base text-[#48AAAD] m-0">Here you can see your uploaded file</p>
       </div>
-      
-      <div class="attached-files-divider"></div>
-      
-      <div class="attached-files-table-header">
-        <div class="file-header-item">File Name</div>
-        <div class="file-header-item">Size</div>
-        <div class="file-header-item">Uploaded At</div>
-        <div class="file-header-item">Action</div>
+      <div class="h-px bg-[#48AAAD] m-0"></div>
+      <div class="grid grid-cols-4 gap-4 px-8 py-4 bg-gray-50 font-semibold text-gray-700 text-sm">
+        <div>File Name</div>
+        <div>Size</div>
+        <div>Uploaded At</div>
+        <div>Action</div>
       </div>
-      
-      <div class="attached-files-divider"></div>
-      
-      <div class="attached-files-content">
-        <div v-for="(file, index) in uploadedFiles" :key="index" class="file-row">
-          <div class="file-item">{{ file.name }}</div>
-          <div class="file-item">{{ file.size }}</div>
-          <div class="file-item">{{ file.uploadedAt }}</div>
-          <div class="file-item">
-            <button class="action-btn delete-btn" @click="deleteFile(index)">Delete</button>
+      <div class="h-px bg-[#48AAAD] m-0"></div>
+      <div class="px-8 py-4">
+        <div v-for="(file, index) in uploadedFiles" :key="index" class="grid grid-cols-4 gap-4 items-center py-2 border-b last:border-b-0">
+          <div>{{ file.name }}</div>
+          <div>{{ file.size }}</div>
+          <div>{{ file.uploadedAt }}</div>
+          <div>
+            <button class="bg-red-100 text-red-600 px-4 py-1 rounded-md font-semibold hover:bg-red-200 transition" @click="deleteFile(index)">Delete</button>
           </div>
         </div>
-        <div v-if="!uploadedFiles.length" class="no-files-message">
-          No files uploaded yet.
-        </div>
+        <div v-if="!uploadedFiles.length" class="text-gray-400 text-center py-4">No files uploaded yet.</div>
       </div>
     </div>
 
-    <div v-if="resumeData" class="resume-data-container">
-      <div class="resume-data-header">
-        <h2 class="resume-data-title">Resume Information</h2>
-        <p class="resume-data-subtitle">Parsed data from your uploaded resume</p>
+    <!-- Resume Data Section -->
+    <div v-if="resumeData" class="w-4/5 mx-auto my-8 bg-white rounded-lg shadow">
+      <div class="px-8 pt-6 pb-2">
+        <h2 class="text-xl font-semibold text-[#016064] mb-1">Resume Information</h2>
+        <p class="text-base text-[#48AAAD] m-0">Parsed data from your uploaded resume</p>
       </div>
-      
-      <div class="resume-data-divider"></div>
-      
-      <div class="resume-data-content">
-        <div class="resume-section">
-          <h3 class="section-title">Personal Information</h3>
-          <div class="info-grid">
-            <div class="info-item">
-              <span class="info-label">Name:</span>
-              <span class="info-value">{{ resumeData.analysis.name || 'N/A' }}</span>
+      <div class="h-px bg-[#48AAAD] m-0"></div>
+      <div class="px-8 py-6">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-[#016064] mb-2">Personal Information</h3>
+          <div class="grid grid-cols-3 gap-6">
+            <div>
+              <span class="font-semibold text-gray-700">Name:</span>
+              <span class="ml-2 text-gray-800">{{ resumeData.analysis.name || 'N/A' }}</span>
             </div>
-            <div class="info-item">
-              <span class="info-label">Email:</span>
-              <span class="info-value">{{ resumeData.analysis.email || 'N/A' }}</span>
+            <div>
+              <span class="font-semibold text-gray-700">Email:</span>
+              <span class="ml-2 text-gray-800">{{ resumeData.analysis.email || 'N/A' }}</span>
             </div>
-            <div class="info-item">
-              <span class="info-label">Phone:</span>
-              <span class="info-value">{{ resumeData.analysis.phone || 'N/A' }}</span>
+            <div>
+              <span class="font-semibold text-gray-700">Phone:</span>
+              <span class="ml-2 text-gray-800">{{ resumeData.analysis.phone || 'N/A' }}</span>
             </div>
           </div>
         </div>
-
-        <div class="resume-section">
-          <h3 class="section-title">Skills</h3>
-          <div class="skills-container">
-            <span v-if="resumeData.analysis.skills?.length" class="skill-tag" v-for="skill in resumeData.analysis.skills" :key="skill">
+        <div class="mb-6">
+          <h3 class="text-lg font-semibold text-[#016064] mb-2">Skills</h3>
+          <div class="flex flex-wrap gap-2">
+            <span v-if="resumeData.analysis.skills?.length" class="bg-[#48AAAD] text-white px-3 py-1 rounded-full text-sm font-medium" v-for="skill in resumeData.analysis.skills" :key="skill">
               {{ skill }}
             </span>
-            <span v-else class="no-data">No skills found</span>
+            <span v-else class="text-gray-400">No skills found</span>
           </div>
         </div>
-
-        <div v-if="resumeData.analysis.experience?.length" class="resume-section">
-          <h3 class="section-title">Work Experience</h3>
-          <div class="experience-list">
-            <div v-for="(exp, index) in resumeData.analysis.experience" :key="index" class="experience-item">
-              <div class="experience-header">
-                <h4 class="job-title">{{ exp.title }}</h4>
-                <span class="company-name">{{ exp.company }}</span>
+        <div v-if="resumeData.analysis.experience?.length" class="mb-6">
+          <h3 class="text-lg font-semibold text-[#016064] mb-2">Work Experience</h3>
+          <div class="space-y-4">
+            <div v-for="(exp, index) in resumeData.analysis.experience" :key="index" class="bg-gray-50 rounded-lg p-4 shadow-sm">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-bold text-base text-[#016064]">{{ exp.title }}</h4>
+                <span class="text-[#48AAAD] font-semibold">{{ exp.company }}</span>
               </div>
-              <div class="experience-meta">
-                <span class="location">{{ exp.location }}</span>
-                <span class="dates">{{ exp.dates }}</span>
+              <div class="flex items-center gap-6 mb-2">
+                <span class="text-gray-500">{{ exp.location }}</span>
+                <span class="text-gray-400">{{ exp.dates }}</span>
               </div>
-              <ul class="experience-bullets">
+              <ul class="list-disc list-inside ml-4 text-gray-700">
                 <li v-for="(bullet, i) in exp.bullets" :key="i">{{ bullet }}</li>
               </ul>
             </div>
@@ -283,10 +273,10 @@ const deleteFile = (index) => {
       </div>
     </div>
 
-    <div v-if="resumeData" class="continue-button-container">
-      <button @click="goToJobDescriptionView" class="continue-button">
-        <span class="button-text">Continue to Job Description</span>
-        <span class="button-icon">→</span>
+    <div v-if="resumeData" class="flex justify-center w-4/5 mx-auto my-8">
+      <button @click="goToJobDescriptionView" class="bg-gradient-to-r from-[#016064] to-[#48AAAD] text-white rounded-full px-8 py-3 text-lg font-semibold shadow transition hover:from-[#014d50] hover:to-[#3a8a8d] flex items-center gap-3 relative overflow-hidden">
+        <span class="font-semibold tracking-wide">Continue to Job Description</span>
+        <span class="text-xl font-bold transition-transform">→</span>
       </button>
     </div>
 
@@ -296,661 +286,3 @@ const deleteFile = (index) => {
   </div>
 </template>
 
-<style scoped>
-.header-bar {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  background: #016064;
-  /*border-radius: 1.25rem;*/
-  padding: 1.5rem 2.5rem 1.5rem 2.5rem;
-  margin-bottom: 2rem;
-  margin-top: 0;
-}
-.header-title {
-  color: white;
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin: 0;
-  padding: 0;
-  letter-spacing: -0.5px;
-}
-.auth-container-bar {
-  display: flex;
-  align-items: flex-start;
-}
-.login-button-container-bar {
-  display: flex;
-  align-items: flex-start;
-}
-.login-button-main-bar {
-  background: linear-gradient(135deg, #48AAAD 0%, #016064 100%);
-  color: white;
-  padding: 0.85rem 2.5rem;
-  min-width: 170px;
-  border: none;
-  border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(1, 96, 100, 0.3);
-  text-decoration: none;
-  display: inline-block;
-  margin-top: 0.25rem;
-  margin-right: 0.25rem;
-}
-.login-button-main-bar:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
-  background: linear-gradient(135deg, #3a8a8d 0%, #014d50 100%);
-}
-.login-button-main-bar:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(1, 96, 100, 0.3);
-}
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 2px solid #48AAAD;
-  margin-top: 0.25rem;
-  margin-right: 0.25rem;
-}
-.user-name {
-  color: #016064;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-.logout-button {
-  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.logout-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
-}
-.upload-area {
-  background: #fff;
-  border: 2px solid #48AAAD;
-  border-radius: 1.5rem; /* Large rounded corners */
-  box-shadow: 0 4px 24px 0 rgba(30, 34, 90, 0.06);
-  padding: 2.0rem 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  transition: border-color 0.2s, box-shadow 0.2s;
-  margin-bottom: 2rem;
-  width: 65vw;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.upload-area:hover, .upload-area:focus-within {
-  border-color: #016064; 
-  box-shadow: 0 6px 32px 0 rgba(160, 132, 232, 0.12);
-}
-
-.upload-area .upload-icon {
-  font-size: 2.5rem;
-  color: #a084e8;
-  margin-bottom: 1rem;
-}
-
-.upload-area .upload-text {
-  color: #6c6f93;
-  font-size: 1.1rem;
-  margin-bottom: 0.5rem;
-}
-
-.upload-area .upload-link {
-  color: #48AAAD;
-  font-weight: 600;
-  cursor: pointer;
-  transition: color 0.2s;
-}
-
-.upload-area .upload-link:hover {
-  color: #016064;
-}
-
-/* Attached Files Section */
-.attached-files-container {
-  width: 80%;
-  margin: 2rem auto;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.attached-files-header {
-  padding: 1.5rem 2rem 1rem 2rem;
-}
-
-.attached-files-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #016064;
-  margin: 0 0 0.5rem 0;
-}
-
-.attached-files-subtitle {
-  font-size: 1rem;
-  color: #48AAAD;
-  margin: 0;
-}
-
-.attached-files-divider {
-  height: 1px;
-  background: #48AAAD;
-  margin: 0;
-}
-
-.attached-files-table-header {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem 2rem;
-  background: #f9fafb;
-  font-weight: 600;
-  color: #374151;
-  font-size: 0.875rem;
-}
-
-.file-header-item {
-  text-align: left;
-}
-
-.file-header-item:last-child {
-  text-align: right;
-}
-
-.attached-files-content {
-  padding: 0 2rem;
-}
-
-.file-row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr;
-  gap: 1rem;
-  padding: 1rem 0;
-  border-bottom: 1px solid #f3f4f6;
-  align-items: center;
-}
-
-.file-row:last-child {
-  border-bottom: none;
-}
-
-.file-item {
-  font-size: 0.875rem;
-  color: #374151;
-}
-
-.file-item:last-child {
-  text-align: right;
-}
-
-.action-btn {
-  padding: 0.25rem 0.75rem;
-  border: none;
-  border-radius: 0.25rem;
-  font-size: 0.75rem;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.delete-btn {
-  background: #ef4444;
-  color: white;
-}
-
-.delete-btn:hover {
-  background: #dc2626;
-}
-
-.no-files-message {
-  text-align: center;
-  color: #9ca3af;
-  padding: 2rem;
-  font-style: italic;
-}
-
-/* Resume Data Section */
-.resume-data-container {
-  width: 80%;
-  margin: 2rem auto;
-  background: white;
-  border-radius: 0.5rem;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
-}
-
-.resume-data-header {
-  padding: 1.5rem 2rem 1rem 2rem;
-}
-
-.resume-data-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #016064;
-  margin: 0 0 0.5rem 0;
-}
-
-.resume-data-subtitle {
-  font-size: 1rem;
-  color: #48AAAD;
-  margin: 0;
-}
-
-.resume-data-divider {
-  height: 1px;
-  background: #48AAAD;
-  margin: 0;
-}
-
-.resume-data-content {
-  padding: 2rem;
-}
-
-.resume-section {
-  margin-bottom: 2rem;
-}
-
-.resume-section:last-child {
-  margin-bottom: 0;
-}
-
-.section-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: #374151;
-  margin: 0 0 1rem 0;
-  padding-bottom: 0.5rem;
-  border-bottom: 2px solid #e5e7eb;
-}
-
-.info-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1rem;
-}
-
-.info-item {
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
-
-.info-label {
-  font-weight: 600;
-  color: #6b7280;
-  font-size: 0.875rem;
-}
-
-.info-value {
-  color: #374151;
-  font-size: 1rem;
-  word-break: break-word;
-}
-
-.skills-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-}
-
-.skill-tag {
-  background: #016064;
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 1.5rem;
-  font-size: 0.875rem;
-  font-weight: 500;
-  display: inline-block;
-}
-
-.no-data {
-  color: #9ca3af;
-  font-style: italic;
-}
-
-.experience-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.experience-item {
-  padding: 1.5rem;
-  border: 1px solid #e5e7eb;
-  border-radius: 0.5rem;
-  background: #f9fafb;
-}
-
-.experience-header {
-  margin-bottom: 0.75rem;
-}
-
-.job-title {
-  font-size: 1.125rem;
-  font-weight: 600;
-  color: #374151;
-  margin: 0 0 0.25rem 0;
-}
-
-.company-name {
-  font-size: 1rem;
-  color: #016064;
-  font-weight: 500;
-}
-
-.experience-meta {
-  display: flex;
-  gap: 1rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-  color: #6b7280;
-}
-
-.location::before {
-  content: "📍 ";
-}
-
-.dates::before {
-  content: "📅 ";
-}
-
-.experience-bullets {
-  margin: 0;
-  padding-left: 1.5rem;
-}
-
-.experience-bullets li {
-  color: #374151;
-  margin-bottom: 0.5rem;
-  line-height: 1.5;
-}
-
-.experience-bullets li:last-child {
-  margin-bottom: 0;
-}
-
-/* Continue Button */
-.continue-button-container {
-  width: 80%;
-  margin: 2rem auto;
-  display: flex;
-  justify-content: center;
-  padding: 1rem 0;
-}
-
-.continue-button {
-  background: linear-gradient(135deg, #016064 0%, #48AAAD 100%);
-  color: white;
-  border: none;
-  border-radius: 2rem;
-  padding: 1rem 2.5rem;
-  font-size: 1.125rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(1, 96, 100, 0.3);
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.continue-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.continue-button:hover::before {
-  left: 100%;
-}
-
-.continue-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
-  background: linear-gradient(135deg, #014d50 0%, #3a8a8d 100%);
-}
-
-.continue-button:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(1, 96, 100, 0.3);
-}
-
-.button-text {
-  font-weight: 600;
-  letter-spacing: 0.025em;
-}
-
-.button-icon {
-  font-size: 1.25rem;
-  font-weight: bold;
-  transition: transform 0.3s ease;
-}
-
-.continue-button:hover .button-icon {
-  transform: translateX(4px);
-}
-
-/* Progress Indicator Styles */
-.progress-container {
-  width: 80%;
-  margin: 2rem auto;
-  display: flex;
-  justify-content: center;
-}
-
-.progress-card {
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-  padding: 2rem;
-  width: 100%;
-  max-width: 500px;
-  text-align: center;
-  border: 2px solid #016064;
-}
-
-.progress-header {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-}
-
-.progress-icon {
-  font-size: 2rem;
-  animation: bounce 2s infinite;
-}
-
-.progress-title {
-  font-size: 1.5rem;
-  font-weight: 600;
-  color: #016064;
-  margin: 0;
-}
-
-.progress-bar-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.progress-bar {
-  flex: 1;
-  height: 12px;
-  background: #e5e7eb;
-  border-radius: 6px;
-  overflow: hidden;
-  position: relative;
-}
-
-.progress-fill {
-  height: 100%;
-  background: linear-gradient(90deg, #016064, #48AAAD);
-  border-radius: 6px;
-  transition: width 0.3s ease;
-  position: relative;
-}
-
-.progress-fill::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  animation: shimmer 2s infinite;
-}
-
-.progress-text {
-  font-weight: 600;
-  color: #016064;
-  min-width: 50px;
-  font-size: 1.1rem;
-}
-
-.progress-stage {
-  color: #6b7280;
-  font-size: 1rem;
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-}
-
-.progress-spinner {
-  display: flex;
-  justify-content: center;
-}
-
-.spinner {
-  width: 40px;
-  height: 40px;
-  border: 4px solid #e5e7eb;
-  border-top: 4px solid #016064;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
-  40% { transform: translateY(-10px); }
-  60% { transform: translateY(-5px); }
-}
-
-@keyframes shimmer {
-  0% { transform: translateX(-100%); }
-  100% { transform: translateX(100%); }
-}
-
-/* Auth Section Styles */
-.auth-container {
-  position: absolute;
-  top: 2.5rem;
-  right: 1.5rem;
-  z-index: 10;
-}
-
-.user-info {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  background: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  border: 2px solid #48AAAD;
-}
-
-.user-name {
-  color: #016064;
-  font-weight: 600;
-  font-size: 0.95rem;
-}
-
-.logout-button {
-  background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);
-  color: white;
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 8px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.logout-button:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-  background: linear-gradient(135deg, #b91c1c 0%, #dc2626 100%);
-}
-
-/* Login Button Styles */
-.login-button-container {
-  position: absolute;
-  top: 2.5rem;
-  right: 1.5rem;
-  z-index: 10;
-}
-
-.login-button-main {
-  background: linear-gradient(135deg, #48AAAD 0%, #016064 100%);
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(1, 96, 100, 0.3);
-  text-decoration: none;
-  display: inline-block;
-}
-
-.login-button-main:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(1, 96, 100, 0.4);
-  background: linear-gradient(135deg, #3a8a8d 0%, #014d50 100%);
-}
-
-.login-button-main:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 10px rgba(1, 96, 100, 0.3);
-}
-</style>
