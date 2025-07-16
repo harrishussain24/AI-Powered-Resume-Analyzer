@@ -123,112 +123,112 @@ onMounted(async () => {
 
 <template>
   <!-- Main Content -->
-  <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow">
+  <div class="matchresults-root">
     <!-- Heading Section -->
-    <div class="bg-[#016064] rounded-xl px-10 py-6 mb-8">
-      <h2 class="text-3xl font-bold text-white m-0 p-0">Match Results</h2>
-      <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mt-4"></div>
+    <div class="matchresults-header">
+      <h2 class="matchresults-title">Match Results</h2>
+      <div class="matchresults-header-divider"></div>
     </div>
 
     <!-- Progress Indicator -->
-    <div v-if="showProgress" class="flex justify-center w-4/5 mx-auto my-8">
-      <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-xl text-center border-2 border-[#016064]">
-        <div class="flex items-center justify-center gap-4 mb-6">
-          <div class="text-3xl animate-bounce">🏯</div>
-          <h3 class="text-xl font-semibold text-[#016064] m-0">Matching Resume to Job</h3>
+    <div v-if="showProgress" class="matchresults-progress-wrap">
+      <div class="matchresults-progress-card">
+        <div class="matchresults-progress-header">
+          <div class="matchresults-progress-icon">🏯</div>
+          <h3 class="matchresults-progress-title">Matching Resume to Job</h3>
         </div>
-        <div class="flex items-center gap-4 mb-4">
-          <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden relative">
-            <div class="h-full bg-gradient-to-r from-[#016064] to-[#48AAAD] rounded-full transition-all duration-300" :style="{ width: matchProgress + '%' }"></div>
+        <div class="matchresults-progress-bar-wrap">
+          <div class="matchresults-progress-bar-bg">
+            <div class="matchresults-progress-bar" :style="{ width: matchProgress + '%' }"></div>
           </div>
-          <div class="font-semibold text-[#016064] min-w-[50px] text-lg">{{ Math.round(matchProgress) }}%</div>
+          <div class="matchresults-progress-percent">{{ Math.round(matchProgress) }}%</div>
         </div>
-        <div class="text-gray-500 text-base font-medium mb-6">{{ matchStage }}</div>
-        <div class="flex justify-center">
-          <div class="w-10 h-10 border-4 border-gray-200 border-t-[#016064] rounded-full animate-spin"></div>
+        <div class="matchresults-progress-stage">{{ matchStage }}</div>
+        <div class="matchresults-progress-spinner-wrap">
+          <div class="matchresults-progress-spinner"></div>
         </div>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div v-if="!matchResult && !error && !showProgress" class="flex flex-col items-center justify-center py-12">
-      <div class="w-10 h-10 border-4 border-gray-200 border-t-[#48AAAD] rounded-full animate-spin mb-4"></div>
-      <p class="text-[#016064] text-lg font-semibold">Analyzing your resume against the job description...</p>
+    <div v-if="!matchResult && !error && !showProgress" class="matchresults-loading">
+      <div class="matchresults-loading-spinner"></div>
+      <p class="matchresults-loading-text">Analyzing your resume against the job description...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="flex flex-col items-center justify-center py-12">
-      <div class="text-4xl mb-2">❌</div>
-      <h3 class="text-xl font-bold text-red-600 mb-2">Analysis Failed</h3>
-      <p class="text-red-500 text-base">{{ error }}</p>
+    <div v-else-if="error" class="matchresults-error-wrap">
+      <div class="matchresults-error-icon">❌</div>
+      <h3 class="matchresults-error-title">Analysis Failed</h3>
+      <p class="matchresults-error-text">{{ error }}</p>
     </div>
 
     <!-- Results Container -->
-    <div v-else-if="matchResult" class="w-4/5 mx-auto my-8 bg-white rounded-lg shadow">
-      <div class="px-8 pt-6 pb-2">
-        <h2 class="text-xl font-semibold text-[#016064] mb-1">🏯 Analysis Results</h2>
-        <p class="text-base text-[#48AAAD] m-0">Your resume match analysis is complete</p>
+    <div v-else-if="matchResult" class="matchresults-results-wrap">
+      <div class="matchresults-results-header">
+        <h2 class="matchresults-results-title">🏯 Analysis Results</h2>
+        <p class="matchresults-results-desc">Your resume match analysis is complete</p>
       </div>
-      <div class="h-px bg-[#48AAAD] m-0"></div>
-      <div class="px-8 py-6">
+      <div class="matchresults-results-divider"></div>
+      <div class="matchresults-results-body">
         <!-- Overall Score Section -->
-        <div class="mb-8">
-          <div class="flex items-center justify-between mb-2">
-            <h3 class="text-lg font-semibold text-[#016064]">🏆 Overall Match Score</h3>
-            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-[#48AAAD] to-[#016064] flex items-center justify-center text-2xl font-bold text-white shadow-inner">
+        <div class="matchresults-score-wrap">
+          <div class="matchresults-score-header">
+            <h3 class="matchresults-score-title">🏆 Overall Match Score</h3>
+            <div class="matchresults-score-circle">
               <span>{{ Math.round(matchResult.overall_score * 100) }}%</span>
             </div>
           </div>
-          <div class="w-full h-4 bg-gray-200 rounded-full overflow-hidden">
-            <div class="h-full bg-gradient-to-r from-[#48AAAD] to-[#016064] rounded-full transition-all duration-300" :style="{ width: matchResult.overall_score * 100 + '%' }"></div>
+          <div class="matchresults-score-bar-bg">
+            <div class="matchresults-score-bar" :style="{ width: matchResult.overall_score * 100 + '%' }"></div>
           </div>
         </div>
         <!-- Detailed Scores Section -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+        <div class="matchresults-details-grid">
           <!-- Skill Match Score -->
-          <div class="bg-gray-50 rounded-lg p-6 shadow-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-xl">💡</span>
-              <h4 class="text-base font-semibold text-[#016064]">Skill Match</h4>
+          <div class="matchresults-detail-card">
+            <div class="matchresults-detail-header">
+              <span class="matchresults-detail-icon">💡</span>
+              <h4 class="matchresults-detail-title">Skill Match</h4>
             </div>
-            <div class="text-2xl font-bold text-[#48AAAD] mb-2">{{ Math.round(matchResult.skill_match_score * 100) }}%</div>
-            <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-[#48AAAD] to-[#016064] rounded-full transition-all duration-300" :style="{ width: matchResult.skill_match_score * 100 + '%' }"></div>
+            <div class="matchresults-detail-score">{{ Math.round(matchResult.skill_match_score * 100) }}%</div>
+            <div class="matchresults-detail-bar-bg">
+              <div class="matchresults-detail-bar" :style="{ width: matchResult.skill_match_score * 100 + '%' }"></div>
             </div>
           </div>
           <!-- Experience Match Score -->
-          <div class="bg-gray-50 rounded-lg p-6 shadow-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="text-xl">📈</span>
-              <h4 class="text-base font-semibold text-[#016064]">Experience Match</h4>
+          <div class="matchresults-detail-card">
+            <div class="matchresults-detail-header">
+              <span class="matchresults-detail-icon">📈</span>
+              <h4 class="matchresults-detail-title">Experience Match</h4>
             </div>
-            <div class="text-2xl font-bold text-[#48AAAD] mb-2">{{ Math.round(matchResult.experience_match_score * 100) }}%</div>
-            <div class="w-full h-3 bg-gray-200 rounded-full overflow-hidden">
-              <div class="h-full bg-gradient-to-r from-[#48AAAD] to-[#016064] rounded-full transition-all duration-300" :style="{ width: matchResult.experience_match_score * 100 + '%' }"></div>
+            <div class="matchresults-detail-score">{{ Math.round(matchResult.experience_match_score * 100) }}%</div>
+            <div class="matchresults-detail-bar-bg">
+              <div class="matchresults-detail-bar" :style="{ width: matchResult.experience_match_score * 100 + '%' }"></div>
             </div>
           </div>
         </div>
         <!-- Matched Skills Section -->
-        <div class="mb-8">
-          <h3 class="text-lg font-semibold text-[#016064] mb-2">✅ Matched Skills</h3>
-          <div class="flex flex-wrap gap-2">
+        <div class="matchresults-matched-skills">
+          <h3 class="matchresults-section-title">✅ Matched Skills</h3>
+          <div class="matchresults-skills-list">
             <span v-if="matchResult.matched_skills && matchResult.matched_skills.length" 
-                  class="bg-[#48AAAD] text-white px-3 py-1 rounded-full text-sm font-medium" 
+                  class="matchresults-skill" 
                   v-for="skill in matchResult.matched_skills" 
                   :key="skill">
               {{ skill }}
             </span>
-            <span v-else class="text-gray-400">No matching skills found</span>
+            <span v-else class="matchresults-skill-empty">No matching skills found</span>
           </div>
         </div>
         <!-- Missing Requirements Section -->
-        <div class="mb-8">
-          <h3 class="text-lg font-semibold text-[#016064] mb-2">❌ Missing Requirements</h3>
+        <div class="matchresults-missing-reqs">
+          <h3 class="matchresults-section-title">❌ Missing Requirements</h3>
           <!-- Missing Skills -->
-          <div v-if="matchResult.missing_skills && matchResult.missing_skills.length" class="mb-4">
-            <h4 class="text-base font-semibold text-[#48AAAD] mb-1">Missing Skills:</h4>
-            <div class="flex flex-wrap gap-2">
-              <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium" 
+          <div v-if="matchResult.missing_skills && matchResult.missing_skills.length" class="matchresults-missing-skills">
+            <h4 class="matchresults-missing-title">Missing Skills:</h4>
+            <div class="matchresults-missing-list">
+              <span class="matchresults-missing-item" 
                     v-for="skill in matchResult.missing_skills" 
                     :key="skill">
                 {{ skill }}
@@ -236,10 +236,10 @@ onMounted(async () => {
             </div>
           </div>
           <!-- Missing Experience -->
-          <div v-if="matchResult.missing_experience && matchResult.missing_experience.length" class="mb-4">
-            <h4 class="text-base font-semibold text-[#48AAAD] mb-1">Missing Experience:</h4>
-            <div class="flex flex-wrap gap-2">
-              <span class="bg-red-100 text-red-600 px-3 py-1 rounded-full text-sm font-medium" 
+          <div v-if="matchResult.missing_experience && matchResult.missing_experience.length" class="matchresults-missing-experience">
+            <h4 class="matchresults-missing-title">Missing Experience:</h4>
+            <div class="matchresults-missing-list">
+              <span class="matchresults-missing-item" 
                     v-for="exp in matchResult.missing_experience" 
                     :key="exp">
                 {{ exp }}

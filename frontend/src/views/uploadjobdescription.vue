@@ -69,100 +69,100 @@ const showFinalResults = () => {
 
 <template>
   <!-- Main Content -->
-  <div class="max-w-5xl mx-auto mt-24 p-6 bg-white rounded-lg shadow">
+  <div class="jobdesc-root">
     <!-- Heading Section -->
-    <div class="bg-[#016064] rounded-xl px-10 py-6 mb-8">
-      <h2 class="text-3xl font-bold text-white m-0 p-0">Upload Job Description</h2>
-      <div class="h-px bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 mt-4"></div>
+    <div class="jobdesc-header">
+      <h2 class="jobdesc-title">Upload Job Description</h2>
+      <div class="jobdesc-header-divider"></div>
     </div>
 
     <!-- Progress Indicator -->
-    <div v-if="showProgress" class="flex justify-center w-4/5 mx-auto my-8">
-      <div class="bg-white rounded-xl shadow-lg p-8 w-full max-w-xl text-center border-2 border-[#016064]">
-        <div class="flex items-center justify-center gap-4 mb-6">
-          <div class="text-3xl animate-bounce">🔍</div>
-          <h3 class="text-xl font-semibold text-[#016064] m-0">Analyzing Job Description</h3>
+    <div v-if="showProgress" class="jobdesc-progress-wrap">
+      <div class="jobdesc-progress-card">
+        <div class="jobdesc-progress-header">
+          <div class="jobdesc-progress-icon">🔍</div>
+          <h3 class="jobdesc-progress-title">Analyzing Job Description</h3>
         </div>
-        <div class="flex items-center gap-4 mb-4">
-          <div class="flex-1 h-3 bg-gray-200 rounded-full overflow-hidden relative">
-            <div class="h-full bg-gradient-to-r from-[#016064] to-[#48AAAD] rounded-full transition-all duration-300" :style="{ width: analysisProgress + '%' }"></div>
+        <div class="jobdesc-progress-bar-wrap">
+          <div class="jobdesc-progress-bar-bg">
+            <div class="jobdesc-progress-bar" :style="{ width: analysisProgress + '%' }"></div>
           </div>
-          <div class="font-semibold text-[#016064] min-w-[50px] text-lg">{{ Math.round(analysisProgress) }}%</div>
+          <div class="jobdesc-progress-percent">{{ Math.round(analysisProgress) }}%</div>
         </div>
-        <div class="text-gray-500 text-base font-medium mb-6">{{ analysisStage }}</div>
-        <div class="flex justify-center">
-          <div class="w-10 h-10 border-4 border-gray-200 border-t-[#016064] rounded-full animate-spin"></div>
+        <div class="jobdesc-progress-stage">{{ analysisStage }}</div>
+        <div class="jobdesc-progress-spinner-wrap">
+          <div class="jobdesc-progress-spinner"></div>
         </div>
       </div>
     </div>
 
     <!-- Job Description Input Section -->
-    <div class="w-4/5 mx-auto my-8 bg-white rounded-lg shadow">
-      <div class="px-8 pt-6 pb-2">
-        <h2 class="text-xl font-semibold text-[#016064] mb-1">Job Description</h2>
-        <p class="text-base text-[#48AAAD] m-0">Paste the job description here</p>
+    <div class="jobdesc-form-wrap">
+      <div class="jobdesc-form-header">
+        <h2 class="jobdesc-form-title">Job Description</h2>
+        <p class="jobdesc-form-desc">Paste the job description here</p>
       </div>
-      <div class="h-px bg-[#48AAAD] m-0"></div>
-      <div class="px-8 py-6">
+      <div class="jobdesc-form-divider"></div>
+      <div class="jobdesc-form-body">
         <textarea 
           v-model="jobDescription" 
           rows="12" 
-          class="w-full bg-white border-2 border-[#48AAAD] rounded-xl p-4 text-[#016064] text-base focus:outline-none focus:border-[#016064] focus:bg-[#f4f8f8] transition mb-4 resize-none shadow"
+          class="jobdesc-textarea"
           placeholder="Paste the job description here..."
         ></textarea>
-        <div class="flex justify-end mb-2">
+        <div class="jobdesc-form-btn-wrap">
           <button 
             @click="analyzeJobDescription" 
             :disabled="isSubmitting" 
-            class="bg-gradient-to-r from-[#016064] to-[#48AAAD] text-white rounded-full px-8 py-3 text-lg font-semibold shadow transition hover:from-[#014d50] hover:to-[#3a8a8d] flex items-center gap-3 relative overflow-hidden disabled:opacity-60 disabled:cursor-not-allowed"
+            class="jobdesc-analyze-btn"
           >
-            <span class="font-semibold tracking-wide">{{ isSubmitting ? 'Analyzing...' : 'Analyze Job Description' }}</span>
-            <span class="text-xl font-bold transition-transform">🔍</span>
+            <span>{{ isSubmitting ? 'Analyzing...' : 'Analyze Job Description' }}</span>
+            <span class="jobdesc-analyze-icon">🔍</span>
           </button>
         </div>
-        <div v-if="error" class="text-red-600 text-sm mt-2">❌ {{ error }}</div>
+        <div v-if="error" class="jobdesc-error">❌ {{ error }}</div>
       </div>
     </div>
 
     <!-- Parsed Job Description Section -->
-    <div v-if="store.jobDescriptionData" class="w-4/5 mx-auto my-8 bg-white rounded-lg shadow">
-      <div class="px-8 pt-6 pb-2">
-        <h2 class="text-xl font-semibold text-[#016064] mb-1">Job Description Information</h2>
-        <p class="text-base text-[#48AAAD] m-0">Parsed data from your job description</p>
+    <div v-if="store.jobDescriptionData" class="jobdesc-parsed-wrap">
+      <div class="jobdesc-parsed-header">
+        <h2 class="jobdesc-parsed-title">Job Description Information</h2>
+        <p class="jobdesc-parsed-desc">Parsed data from your job description</p>
       </div>
-      <div class="h-px bg-[#48AAAD] m-0"></div>
-      <div class="px-8 py-6">
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold text-[#016064] mb-2">Job Details</h3>
-          <div class="grid grid-cols-2 gap-6">
+      <div class="jobdesc-parsed-divider"></div>
+      <div class="jobdesc-parsed-body">
+        <div class="jobdesc-details">
+          <h3 class="jobdesc-section-title">Job Details</h3>
+          <div class="jobdesc-details-grid">
             <div>
-              <span class="font-semibold text-gray-700">Job Title:</span>
-              <span class="ml-2 text-gray-800">{{ store.jobDescriptionData.analysis?.title || store.jobDescriptionData.title || 'N/A' }}</span>
+              <span class="jobdesc-label">Job Title:</span>
+              <span class="jobdesc-value">{{ store.jobDescriptionData.analysis?.title || store.jobDescriptionData.title || 'N/A' }}</span>
             </div>
             <div>
-              <span class="font-semibold text-gray-700">Experience Required:</span>
-              <span class="ml-2 text-gray-800">{{ store.jobDescriptionData.analysis?.experience || store.jobDescriptionData.experience || 'N/A' }}</span>
+              <span class="jobdesc-label">Experience Required:</span>
+              <span class="jobdesc-value">{{ store.jobDescriptionData.analysis?.experience || store.jobDescriptionData.experience || 'N/A' }}</span>
             </div>
           </div>
         </div>
-        <div class="mb-6">
-          <h3 class="text-lg font-semibold text-[#016064] mb-2">Required Skills</h3>
-          <div class="flex flex-wrap gap-2">
+        <div class="jobdesc-skills">
+          <h3 class="jobdesc-section-title">Required Skills</h3>
+          <div class="jobdesc-skills-list">
             <span v-if="(store.jobDescriptionData.analysis?.skills && store.jobDescriptionData.analysis.skills.length) || (store.jobDescriptionData.skills && store.jobDescriptionData.skills.length)" 
-                  class="bg-[#48AAAD] text-white px-3 py-1 rounded-full text-sm font-medium" 
+                  class="jobdesc-skill" 
                   v-for="skill in (store.jobDescriptionData.analysis?.skills || store.jobDescriptionData.skills || [])" 
                   :key="skill">
               {{ skill }}
             </span>
-            <span v-else class="text-gray-400">No skills found</span>
+            <span v-else class="jobdesc-skill-empty">No skills found</span>
           </div>
         </div>
-        <div v-if="(store.jobDescriptionData.analysis?.education && store.jobDescriptionData.analysis.education.length) || (store.jobDescriptionData.education && store.jobDescriptionData.education.length)" class="mb-6">
-          <h3 class="text-lg font-semibold text-[#016064] mb-2">Education Requirements</h3>
-          <div class="flex flex-wrap gap-2">
+        <div v-if="(store.jobDescriptionData.analysis?.education && store.jobDescriptionData.analysis.education.length) || (store.jobDescriptionData.education && store.jobDescriptionData.education.length)" class="jobdesc-education">
+          <h3 class="jobdesc-section-title">Education Requirements</h3>
+          <div class="jobdesc-education-list">
             <span v-for="edu in (store.jobDescriptionData.analysis?.education || store.jobDescriptionData.education || [])" 
                   :key="edu" 
-                  class="bg-[#48AAAD] text-white px-3 py-1 rounded-full text-sm font-medium">
+                  class="jobdesc-education-item">
               {{ edu }}
             </span>
           </div>
@@ -171,10 +171,10 @@ const showFinalResults = () => {
     </div>
 
     <!-- Show Final Results Button -->
-    <div v-if="store.jobDescriptionData" class="flex justify-center w-4/5 mx-auto my-8">
-      <button @click="showFinalResults" class="bg-gradient-to-r from-[#016064] to-[#48AAAD] text-white rounded-full px-8 py-3 text-lg font-semibold shadow transition hover:from-[#014d50] hover:to-[#3a8a8d] flex items-center gap-3 relative overflow-hidden">
-        <span class="font-semibold tracking-wide">Show Final Results</span>
-        <span class="text-xl font-bold transition-transform">📊</span>
+    <div v-if="store.jobDescriptionData" class="jobdesc-final-btn-wrap">
+      <button @click="showFinalResults" class="jobdesc-final-btn">
+        <span>Show Final Results</span>
+        <span class="jobdesc-final-icon">📊</span>
       </button>
     </div>
   </div>

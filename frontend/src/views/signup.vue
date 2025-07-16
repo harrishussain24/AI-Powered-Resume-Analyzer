@@ -59,94 +59,94 @@ const goToLogin = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-gradient-to-br from-[#016064] to-[#48AAAD] flex items-center justify-center p-4">
-    <div class="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+  <div class="signup-root">
+    <div class="signup-container">
       <!-- Header -->
-      <div class="text-center mb-8">
-        <h1 class="text-3xl font-bold text-gray-800 mb-2">Create Account</h1>
-        <p class="text-gray-600">Join us to analyze your resume</p>
+      <div class="signup-header">
+        <h1 class="signup-title">Create Account</h1>
+        <p class="signup-subtitle">Join us to analyze your resume</p>
       </div>
       <!-- Signup Form -->
-      <form @submit.prevent="handleSignup" class="flex flex-col gap-6">
+      <form @submit.prevent="handleSignup" class="signup-form">
         <!-- Name Field -->
-        <div class="flex flex-col gap-2">
-          <label for="name" class="font-semibold text-gray-700 text-sm">Full Name</label>
+        <div class="signup-form-group">
+          <label for="name" class="signup-label">Full Name</label>
           <input
             id="name"
             v-model="name"
             type="text"
             required
-            class="w-full px-4 py-3 border-2 border-[#48AAAD] rounded-lg focus:ring-2 focus:ring-[#016064] focus:border-[#016064] transition text-[#016064] bg-white placeholder-gray-400"
+            class="signup-input"
             placeholder="Enter your full name"
           />
         </div>
         <!-- Email Field -->
-        <div class="flex flex-col gap-2">
-          <label for="email" class="font-semibold text-gray-700 text-sm">Email Address</label>
+        <div class="signup-form-group">
+          <label for="email" class="signup-label">Email Address</label>
           <input
             id="email"
             v-model="email"
             type="email"
             required
-            class="w-full px-4 py-3 border-2 border-[#48AAAD] rounded-lg focus:ring-2 focus:ring-[#016064] focus:border-[#016064] transition text-[#016064] bg-white placeholder-gray-400"
+            class="signup-input"
             placeholder="Enter your email"
           />
         </div>
         <!-- Password Field -->
-        <div class="flex flex-col gap-2">
-          <label for="password" class="font-semibold text-gray-700 text-sm">Password</label>
+        <div class="signup-form-group">
+          <label for="password" class="signup-label">Password</label>
           <input
             id="password"
             v-model="password"
             type="password"
             required
-            class="w-full px-4 py-3 border-2 border-[#48AAAD] rounded-lg focus:ring-2 focus:ring-[#016064] focus:border-[#016064] transition text-[#016064] bg-white placeholder-gray-400"
+            class="signup-input"
             placeholder="Enter your password"
           />
         </div>
         <!-- Confirm Password Field -->
-        <div class="flex flex-col gap-2">
-          <label for="confirmPassword" class="font-semibold text-gray-700 text-sm">Confirm Password</label>
+        <div class="signup-form-group">
+          <label for="confirmPassword" class="signup-label">Confirm Password</label>
           <input
             id="confirmPassword"
             v-model="confirmPassword"
             type="password"
             required
-            class="w-full px-4 py-3 border-2 border-[#48AAAD] rounded-lg focus:ring-2 focus:ring-[#016064] focus:border-[#016064] transition text-[#016064] bg-white placeholder-gray-400"
+            class="signup-input"
             placeholder="Confirm your password"
           />
         </div>
         <!-- Error Message -->
-        <div v-if="error" class="text-red-600 text-sm bg-red-50 p-3 rounded-lg">❌ {{ error }}</div>
+        <div v-if="error" class="signup-error">❌ {{ error }}</div>
         <!-- Success Message -->
-        <div v-if="success" class="text-green-600 text-sm bg-green-50 p-3 rounded-lg">✅ {{ success }}</div>
+        <div v-if="success" class="signup-success">✅ {{ success }}</div>
         <!-- Signup Button -->
         <button
           type="submit"
           :disabled="isSigningUp"
-          class="w-full bg-gradient-to-r from-[#016064] to-[#48AAAD] text-white py-3 px-4 rounded-lg font-medium hover:from-[#014d50] hover:to-[#3a8a8d] focus:ring-2 focus:ring-[#016064] focus:ring-offset-2 transition disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+          class="signup-btn"
         >
           <span v-if="isSigningUp">Creating account...</span>
           <span v-else>Create Account</span>
         </button>
       </form>
       <!-- Login Link -->
-      <div class="text-center mt-6">
-        <p class="text-gray-600">
+      <div class="signup-login-link">
+        <p>
           Already have an account?
           <button
             @click="goToLogin"
-            class="text-[#48AAAD] hover:text-[#016064] font-medium transition ml-1"
+            class="signup-login-btn"
           >
             Sign in here
           </button>
         </p>
       </div>
       <!-- Back to Home -->
-      <div class="text-center mt-4">
+      <div class="signup-back-home">
         <button
           @click="router.push('/')"
-          class="text-gray-500 hover:text-gray-700 text-sm transition"
+          class="signup-back-btn"
         >
           ← Back to Resume Analyzer
         </button>
