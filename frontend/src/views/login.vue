@@ -2,7 +2,7 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
-// import '../assets/login.css'
+import '../assets/login.css'
 
 const router = useRouter()
 const email = ref('')

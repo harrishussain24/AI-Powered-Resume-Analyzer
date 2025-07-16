@@ -2,7 +2,7 @@
 import { ref, onMounted } from 'vue'
 import { useResumeStore } from '../stores/parseddatastore'
 import axios from 'axios'
-// import '../assets/matchresults.css'
+import '../assets/matchresults.css'
 
 const store = useResumeStore()
 const resume = store.resumeData

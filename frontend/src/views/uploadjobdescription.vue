@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useResumeStore } from '../stores/parseddatastore'
 import axios from 'axios'
-// import '../assets/uploadjobdescription.css'
+import '../assets/uploadjobdescription.css'
 
 const store = useResumeStore()
 const router = useRouter()

@@ -3,7 +3,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useResumeStore } from '../stores/parseddatastore'
 import axios from 'axios'
-// import '../assets/uploadresume.css'  // Remove custom CSS import
+import '../assets/uploadresume.css'
 
 const resumeStore = useResumeStore()
 const router = useRouter()
