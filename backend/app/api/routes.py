@@ -59,7 +59,7 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
         filename=file.filename,
         content=text,
         parsed_data=parsed_json,
-        file_url=file_url  # optional: if you've added this column in your DB
+        #file_url=file_url  # optional: if you've added this column in your DB
     )
 
     db.add(new_resume)
