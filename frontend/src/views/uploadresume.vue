@@ -249,6 +249,13 @@ const deleteFile = (index) => {
         </div>
       </div>
 
+      <!-- Go to Job Description Button -->
+      <div v-if="resumeData" class="go-jobdesc-btn-wrap">
+        <button @click="goToJobDescriptionView" class="go-jobdesc-btn">
+          Continue to Job Description
+        </button>
+      </div>
+
       <!-- Error Message -->
       <div v-if="uploadError" class="error-message">
         {{ uploadError }}
