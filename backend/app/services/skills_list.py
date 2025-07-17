@@ -1,4 +1,5 @@
 skills_list = [
+    ":NET Entity Framework"
     ".NET (5+)",
     ".NET Framework (1.0 - 4.8)",
     ".NET MAUI",
