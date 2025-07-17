@@ -71,7 +71,7 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
     return {
         "id": new_resume.id,
         "filename": new_resume.filename,
-        "file_url": file_url,  # expose URL to frontend
+        #"file_url": file_url,  # expose URL to frontend
         "analysis": analysis
     }
 
