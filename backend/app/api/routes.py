@@ -51,14 +51,7 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
             detail="Failed to analyze the resume text."
         )
 
-    # ⬇️ Upload the original file to Supabase
-    try:
-        file_url = await supabase.upload_resume_to_supabase(file)
-    except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to upload to Supabase: {str(e)}"
-        )
+    
 
     parsed_json = json.dumps(analysis)
 
