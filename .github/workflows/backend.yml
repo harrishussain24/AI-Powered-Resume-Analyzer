@@ -29,6 +29,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -39,9 +40,9 @@ jobs:
       
       - name: Create .env file
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> backend/.env
-          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> backend/.env
-          echo "SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}" >> backend/.env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
+          echo "SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}" >> .env
 
       - name: Lint with flake8
         run: |
