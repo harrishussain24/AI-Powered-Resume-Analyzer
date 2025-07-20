@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+  name: 'SignupView'
+})
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'
@@ -40,17 +43,21 @@ const handleSignup = async () => {
       password: password.value
     })
 
-    success.value = 'Account created successfully! Redirecting to login...'
-    
-    // Redirect to login page after successful signup
-    setTimeout(() => {
-      router.push('/login')
-    }, 2000)
+    if (response.status === 201) {
+      success.value = 'Account created successfully! Redirecting to login...'
+
+      setTimeout(() => {
+        router.push('/login')
+      }, 2000)
+    } else {
+      error.value = 'Unexpected response from server'
+    }
   } catch (err) {
     error.value = err.response?.data?.detail || 'Signup failed. Please try again.'
   } finally {
     isSigningUp.value = false
   }
+
 }
 
 const goToLogin = () => {
@@ -71,61 +78,31 @@ const goToLogin = () => {
         <!-- Name Field -->
         <div class="form-group">
           <label for="name" class="form-label">Full Name</label>
-          <input
-            id="name"
-            v-model="name"
-            type="text"
-            required
-            class="form-input"
-            placeholder="Enter your full name"
-          />
+          <input id="name" v-model="name" type="text" required class="form-input" placeholder="Enter your full name" />
         </div>
         <!-- Email Field -->
         <div class="form-group">
           <label for="email" class="form-label">Email Address</label>
-          <input
-            id="email"
-            v-model="email"
-            type="email"
-            required
-            class="form-input"
-            placeholder="Enter your email"
-          />
+          <input id="email" v-model="email" type="email" required class="form-input" placeholder="Enter your email" />
         </div>
         <!-- Password Field -->
         <div class="form-group">
           <label for="password" class="form-label">Password</label>
-          <input
-            id="password"
-            v-model="password"
-            type="password"
-            required
-            class="form-input"
-            placeholder="Enter your password"
-          />
+          <input id="password" v-model="password" type="password" required class="form-input"
+            placeholder="Enter your password" />
         </div>
         <!-- Confirm Password Field -->
         <div class="form-group">
           <label for="confirmPassword" class="form-label">Confirm Password</label>
-          <input
-            id="confirmPassword"
-            v-model="confirmPassword"
-            type="password"
-            required
-            class="form-input"
-            placeholder="Confirm your password"
-          />
+          <input id="confirmPassword" v-model="confirmPassword" type="password" required class="form-input"
+            placeholder="Confirm your password" />
         </div>
         <!-- Error Message -->
         <div v-if="error" class="error-message">❌ {{ error }}</div>
         <!-- Success Message -->
         <div v-if="success" class="success-message">✅ {{ success }}</div>
         <!-- Signup Button -->
-        <button
-          type="submit"
-          :disabled="isSigningUp"
-          class="signup-button"
-        >
+        <button type="submit" :disabled="isSigningUp" class="signup-button">
           <span v-if="isSigningUp">Creating account...</span>
           <span v-else>Create Account</span>
         </button>
@@ -133,22 +110,16 @@ const goToLogin = () => {
       <!-- Login Link -->
       <div class="login-link">
         <span class="login-text">Already have an account?</span>
-        <button
-          @click="goToLogin"
-          class="login-button-link"
-        >
+        <button @click="goToLogin" class="login-button-link">
           Sign in here
         </button>
       </div>
       <!-- Back to Home -->
       <div class="back-link">
-        <button
-          @click="router.push('/')"
-          class="back-button"
-        >
+        <button @click="router.push('/')" class="back-button">
           ← Back to Resume Analyzer
         </button>
       </div>
     </div>
   </div>
-</template> 
+</template>

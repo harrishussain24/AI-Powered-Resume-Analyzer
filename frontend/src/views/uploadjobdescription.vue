@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+  name: 'UploadJobDescriptionView'
+})
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useResumeStore } from '../stores/parseddatastore'
@@ -123,7 +126,6 @@ const showFinalResults = () => {
       </div>
     </div>
 
-    
     <!-- Parsed Job Description Section -->
     <div v-if="store.jobDescriptionData" class="job-data-container">
       <div class="job-data-header">
@@ -148,23 +150,24 @@ const showFinalResults = () => {
         <div class="job-section">
           <h3 class="section-title">Required Skills</h3>
           <div class="skills-container">
-            <span v-if="(store.jobDescriptionData.analysis?.skills && store.jobDescriptionData.analysis.skills.length) || (store.jobDescriptionData.skills && store.jobDescriptionData.skills.length)" 
-                  class="skill-tag" 
-                  v-for="skill in (store.jobDescriptionData.analysis?.skills || store.jobDescriptionData.skills || [])" 
-                  :key="skill">
-              {{ skill }}
-            </span>
+            <template v-if="(store.jobDescriptionData.analysis?.skills && store.jobDescriptionData.analysis.skills.length) || (store.jobDescriptionData.skills && store.jobDescriptionData.skills.length)">
+              <span 
+                class="skill-tag" 
+                v-for="skill in (store.jobDescriptionData.analysis?.skills || store.jobDescriptionData.skills || [])" 
+                :key="skill"
+              >
+                {{ skill }}
+              </span>
+            </template>
             <span v-else class="no-data">No skills found</span>
           </div>
         </div>
         <div v-if="(store.jobDescriptionData.analysis?.education && store.jobDescriptionData.analysis.education.length) || (store.jobDescriptionData.education && store.jobDescriptionData.education.length)" class="job-section">
           <h3 class="section-title">Education Requirements</h3>
           <div class="education-container">
-            <span v-for="edu in (store.jobDescriptionData.analysis?.education || store.jobDescriptionData.education || [])" 
-                  :key="edu" 
-                  class="education-tag">
-              {{ edu }}
-            </span>
+            <template v-for="edu in (store.jobDescriptionData.analysis?.education || store.jobDescriptionData.education || [])" :key="edu">
+              <span class="education-tag">{{ edu }}</span>
+            </template>
           </div>
         </div>
       </div>
@@ -179,4 +182,3 @@ const showFinalResults = () => {
     </div>
   </div>
 </template>
-

@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+  name: 'LoginView'
+})
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import axios from 'axios'

@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+  name: 'MatchResultsView'
+})
 import { ref, onMounted } from 'vue'
 import { useResumeStore } from '../stores/parseddatastore'
 import axios from 'axios'
@@ -213,12 +216,15 @@ onMounted(async () => {
         <div class="skills-section">
           <h3 class="section-title">✅ Matched Skills</h3>
           <div class="matched-skills-container">
-            <span v-if="matchResult.matched_skills && matchResult.matched_skills.length" 
-                  class="matched-skill-tag" 
-                  v-for="skill in matchResult.matched_skills" 
-                  :key="skill">
-              {{ skill }}
-            </span>
+            <template v-if="matchResult.matched_skills && matchResult.matched_skills.length">
+              <span 
+                class="matched-skill-tag" 
+                v-for="skill in matchResult.matched_skills" 
+                :key="skill"
+              >
+                {{ skill }}
+              </span>
+            </template>
             <span v-else class="no-skills-message">No matching skills found</span>
           </div>
         </div>
@@ -228,24 +234,16 @@ onMounted(async () => {
           <!-- Missing Skills -->
           <div v-if="matchResult.missing_skills && matchResult.missing_skills.length" class="missing-skills-container">
             <h4 class="missing-subtitle">Missing Skills:</h4>
-            <div>
-              <span class="missing-skill-tag" 
-                    v-for="skill in matchResult.missing_skills" 
-                    :key="skill">
-                {{ skill }}
-              </span>
-            </div>
+            <template v-for="skill in matchResult.missing_skills" :key="skill">
+              <span class="missing-skill-tag">{{ skill }}</span>
+            </template>
           </div>
           <!-- Missing Experience -->
           <div v-if="matchResult.missing_experience && matchResult.missing_experience.length" class="missing-experience-container">
             <h4 class="missing-subtitle">Missing Experience:</h4>
-            <div>
-              <span class="missing-experience-tag" 
-                    v-for="exp in matchResult.missing_experience" 
-                    :key="exp">
-                {{ exp }}
-              </span>
-            </div>
+            <template v-for="exp in matchResult.missing_experience" :key="exp">
+              <span class="missing-experience-tag">{{ exp }}</span>
+            </template>
           </div>
         </div>
       </div>

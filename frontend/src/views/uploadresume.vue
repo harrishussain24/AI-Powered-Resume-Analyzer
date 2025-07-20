@@ -1,4 +1,7 @@
 <script setup>
+defineOptions({
+  name: 'UploadResumeView'
+})
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useResumeStore } from '../stores/parseddatastore'
@@ -28,7 +31,7 @@ const checkAuthStatus = () => {
   if (authToken && userData) {
     try {
       user.value = JSON.parse(userData)
-    } catch (e) {
+    } catch {
       // Clear invalid data
       localStorage.removeItem('authToken')
       localStorage.removeItem('user')
@@ -238,9 +241,11 @@ const deleteFile = (index) => {
           <div class="resume-section">
             <h3 class="section-title">Skills</h3>
             <div class="skills-container">
-              <span v-if="resumeData.analysis.skills?.length" class="skill-tag" v-for="skill in resumeData.analysis.skills" :key="skill">
-                {{ skill }}
-              </span>
+              <template v-if="resumeData.analysis.skills?.length">
+                <span class="skill-tag" v-for="skill in resumeData.analysis.skills" :key="skill">
+                  {{ skill }}
+                </span>
+              </template>
               <span v-else class="no-data">No skills found.</span>
             </div>
           </div>
