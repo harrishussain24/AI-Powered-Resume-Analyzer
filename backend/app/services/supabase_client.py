@@ -1,6 +1,7 @@
 from supabase import create_client
 import os
 from dotenv import load_dotenv
+import uuid
 
 load_dotenv()
 
@@ -12,7 +13,8 @@ supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 async def upload_resume_to_supabase(file):
     contents = await file.read()
-    file_name = file.filename
+    unique_id = str(uuid.uuid4())
+    file_name = f"{unique_id}_{file.filename}"
 
     # Upload to Supabase Storage (bucket name: "resumes")
     response = supabase.storage.from_("resumes").upload(file_name, contents, {"content-type": file.content_type})
