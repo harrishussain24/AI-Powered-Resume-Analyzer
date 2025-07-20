@@ -10,6 +10,8 @@ if os.getenv("ENV") != "production":
     from dotenv import load_dotenv
 
     load_dotenv()
+    print("SUPABASE_URL env var is:", os.getenv("SUPABASE_URL"))
+    print("SUPABASE_KEY env var is:", os.getenv("SUPABASE_KEY"))
 
 app = FastAPI()
 

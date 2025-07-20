@@ -1,5 +1,5 @@
 import json
-from fastapi import APIRouter, UploadFile, File, Depends, Body, HTTPException
+from fastapi import APIRouter, UploadFile, File, Depends, Body, HTTPException, status
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.services.resume_parser import extract_text_from_pdf, analyze_resume_text
 from app.models.session import get_db
@@ -21,32 +21,32 @@ async def upload_resume(
         text = extract_text_from_pdf(file)
     except PDFSyntaxError:
         raise HTTPException(
-            status_code=HTTPException.HTTP_400_BAD_REQUEST,
+            status_code=status.HTTP_400_BAD_REQUEST,
             detail="Invalid PDF file format.",
         )
     except Exception as e:
         raise HTTPException(
-            status_code=HTTPException.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to read PDF file: {str(e)}",
         )
 
     if not text or "No text found" in text:
         raise HTTPException(
-            status_code=HTTPException.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="No text found in the PDF file.",
         )
 
     text = text.strip()
     if not text:
         raise HTTPException(
-            status_code=HTTPException.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="The PDF file is empty or contains no readable text.",
         )
 
     analysis = analyze_resume_text(text)
     if not analysis:
         raise HTTPException(
-            status_code=HTTPException.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail="Failed to analyze the resume text.",
         )
 
@@ -55,7 +55,7 @@ async def upload_resume(
         file_url = await upload_resume_to_supabase(file)
     except Exception as e:
         raise HTTPException(
-            status_code=HTTPException.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to upload to Supabase: {str(e)}",
         )
 
@@ -88,7 +88,7 @@ async def analyze_job(
 ):
     if not description or not description.strip():
         raise HTTPException(
-            status_code=HTTPException.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Job description must not be empty.",
         )
 
@@ -113,7 +113,7 @@ async def analyze_job(
         }
     except Exception as e:
         raise HTTPException(
-            status_code=HTTPException.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to analyze job description: {str(e)}",
         )
 
@@ -146,7 +146,7 @@ async def test_match():
 async def match_resume_job(data: MatchRequest):
     if not data.resume or not data.job:
         raise HTTPException(
-            status_code=HTTPException.HTTP_422_UNPROCESSABLE_ENTITY,
+            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
             detail="Resume and job data must be provided.",
         )
 
@@ -169,6 +169,6 @@ async def match_resume_job(data: MatchRequest):
 
         traceback.print_exc()
         raise HTTPException(
-            status_code=HTTPException.HTTP_500_INTERNAL_SERVER_ERROR,
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to match resume to job: {str(e)}",
         )

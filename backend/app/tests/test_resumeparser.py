@@ -1,5 +1,6 @@
 import sys
 import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '../../')))
 
 
 from app.services.resume_parser import (
@@ -9,9 +10,6 @@ from app.services.resume_parser import (
     extract_skills,
     extract_experience,
 )
-
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 
 sample_resume_text = """
