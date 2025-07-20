@@ -36,6 +36,12 @@ jobs:
         run: |
           python -m spacy download en_core_web_sm
           python -m spacy link en_core_web_sm en
+      
+      - name: Create .env file
+        run: |
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> backend/.env
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> backend/.env
+          echo "SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}" >> backend/.env
 
       - name: Lint with flake8
         run: |
