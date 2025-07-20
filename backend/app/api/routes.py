@@ -7,7 +7,7 @@ from app.models.db import Resume, JobDescription
 from app.services.job_description_analyzer import analyze_job_description
 from fastapi import Body
 from app.services.matcher import match_resume_to_job
-from app.services.supabase_client import supabase
+from app.services.supabase_client import upload_resume_to_supabase
 from pydantic import BaseModel
 from fastapi import HTTPException, status
 from pdfminer.pdfparser import PDFSyntaxError
@@ -53,7 +53,7 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
 
     # ⬇️ Upload the original file to Supabase
     try:
-        file_url = await supabase.upload_resume_to_supabase(file)
+        file_url = await upload_resume_to_supabase(file)
     except Exception as e:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
