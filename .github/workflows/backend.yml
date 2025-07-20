@@ -29,7 +29,6 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd backend
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
@@ -40,19 +39,15 @@ jobs:
       
       - name: Create .env file
         run: |
-          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" >> .env
+          echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
           echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" >> .env
           echo "SUPABASE_KEY=${{ secrets.SUPABASE_KEY }}" >> .env
 
       - name: Lint with flake8
-        run: |
-          pip install flake8
-          flake8 .
+        run: flake8 .
 
       - name: Run tests with pytest
-        run: |
-          pip install pytest
-          pytest --maxfail=1 --disable-warnings -q
+        run: pytest --maxfail=1 --disable-warnings -q
 
       # Optional Docker build step if you want to test your Dockerfile:
       # - name: Build Docker image
