@@ -1,12 +1,13 @@
-import re
 from rapidfuzz import fuzz, process
 from difflib import SequenceMatcher
+
 
 def text_similarity(text1, text2):
     """Simple text similarity without ML models"""
     if not text1 or not text2:
         return 0.0
     return SequenceMatcher(None, text1.lower(), text2.lower()).ratio()
+
 
 def fuzzy_skill_match(resume_skills, job_skills, threshold=80):
     """
@@ -15,10 +16,13 @@ def fuzzy_skill_match(resume_skills, job_skills, threshold=80):
     """
     matched_skills = set()
     for r_skill in resume_skills:
-        best_match = process.extractOne(r_skill, job_skills, scorer=fuzz.token_sort_ratio)
+        best_match = process.extractOne(
+            r_skill, job_skills, scorer=fuzz.token_sort_ratio
+        )
         if best_match and best_match[1] >= threshold:
             matched_skills.add(best_match[0])
     return matched_skills
+
 
 def match_resume_to_job(resume: dict, job: dict) -> dict:
     # Lowercase sets of skills from resume and job description
@@ -40,14 +44,18 @@ def match_resume_to_job(resume: dict, job: dict) -> dict:
 
     # Fuzzy skill matching
     matched_skills = fuzzy_skill_match(resume_skills, job_skills, threshold=80)
-    skill_match_score = round(len(matched_skills) / len(job_skills), 2) if job_skills else 0.0
+    skill_match_score = (
+        round(len(matched_skills) / len(job_skills), 2) if job_skills else 0.0
+    )
 
     # Calculate missing skills
     missing_skills = list(job_skills - matched_skills)
 
     # Experience similarity using lightweight text comparison
     if resume_experience_text.strip() and job_description.strip():
-        experience_match_score = round(text_similarity(resume_experience_text, job_description), 2)
+        experience_match_score = round(
+            text_similarity(resume_experience_text, job_description), 2
+        )
     else:
         experience_match_score = 0.0
 
@@ -61,5 +69,5 @@ def match_resume_to_job(resume: dict, job: dict) -> dict:
         "experience_match_score": experience_match_score,
         "overall_score": overall_score,
     }
-    
+
     return result

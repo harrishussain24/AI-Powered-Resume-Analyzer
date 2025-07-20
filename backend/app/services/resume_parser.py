@@ -2,7 +2,6 @@ from pdfminer.high_level import extract_text
 from fastapi import UploadFile
 import spacy
 import re
-from spacy.matcher import PhraseMatcher
 
 
 nlp = spacy.load("en_core_web_sm")
@@ -19,6 +18,7 @@ def extract_text_from_pdf(file: UploadFile) -> str:
         return "The PDF file is empty or contains no readable text."
     return text
 
+
 def analyze_resume_text(text: str) -> dict:
     name = extract_name(text)
     email = extract_email(text)
@@ -34,8 +34,9 @@ def analyze_resume_text(text: str) -> dict:
         "experience": experience,
     }
 
+
 def extract_name(text: str) -> str:
-    
+
     lines = text.splitlines()
     header = "\n".join(lines[:5])
     doc = nlp(header)
@@ -50,6 +51,7 @@ def extract_name(text: str) -> str:
 
     return "No name found in the text."
 
+
 def extract_email(text: str) -> str:
     # Regular expression for matching email addresses
     email_pattern = r"[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}"
@@ -57,6 +59,7 @@ def extract_email(text: str) -> str:
     if emails:
         return emails[0]  # Return the first email found
     return "No email found in the text."
+
 
 def extract_phone(text: str) -> str:
     # Regular expression for matching phone numbers
@@ -78,7 +81,7 @@ def extract_skills(text: str) -> list:
     )
     if not match:
         return []
-    
+
     # Join broken lines in the skills section
     skills_section = match.group(1)
     skills_section = re.sub(r"\n+", " ", skills_section)  # all newlines become spaces
@@ -90,9 +93,18 @@ def extract_skills(text: str) -> list:
     skills = [s.strip() for s in raw_skills if s.strip()]
 
     ignoringWordsList = {
-    "languages", "programming languages", "framework & libraries",
-    "databases", "others", "personal skills", "tools", "skills", 
-    "technologies", "frameworks", "soft skills", "technical skills"
+        "languages",
+        "programming languages",
+        "framework & libraries",
+        "databases",
+        "others",
+        "personal skills",
+        "tools",
+        "skills",
+        "technologies",
+        "frameworks",
+        "soft skills",
+        "technical skills",
     }
 
     filtered_skills = []
@@ -111,6 +123,7 @@ def extract_skills(text: str) -> list:
         filtered_skills.append(skill)
 
     return filtered_skills
+
 
 def extract_experience(text: str) -> list:
     # Normalize special dashes
@@ -143,7 +156,7 @@ def extract_experience(text: str) -> list:
     i = 0
     while i < len(lines):
         line = lines[i]
-        parts = [p.strip() for p in line.split('|')]
+        parts = [p.strip() for p in line.split("|")]
 
         if len(parts) == 3:
             title, company, location = parts
@@ -199,20 +212,32 @@ def extract_education(text: str) -> list:
         re.M,
     )
     education_section = match.group(1).strip() if match else ""
-    
 
     # Split by blank lines (one or more)
     blocks = re.split(r"\n\s*\n", education_section)
 
     degree_keywords = [
-        "bachelor", "master", "ph.d", "msc", "bsc", "bs", "ms",
-        "m.sc", "b.sc", "doctor", "mba", "m.tech", "b.tech"
+        "bachelor",
+        "master",
+        "ph.d",
+        "msc",
+        "bsc",
+        "bs",
+        "ms",
+        "m.sc",
+        "b.sc",
+        "doctor",
+        "mba",
+        "m.tech",
+        "b.tech",
     ]
 
     educations = []
 
     for block in blocks:
-        lines = [line.strip("•- ").strip() for line in block.split("\n") if line.strip()]
+        lines = [
+            line.strip("•- ").strip() for line in block.split("\n") if line.strip()
+        ]
         if not lines:
             continue
 
@@ -221,14 +246,16 @@ def extract_education(text: str) -> list:
             "start_date": "",
             "end_date": "",
             "university": "",
-            "location": ""
+            "location": "",
         }
 
         # Extract degree and university/location first
         for i, line in enumerate(lines):
             line_lower = line.lower()
 
-            if not current_education["degree"] and any(k in line_lower for k in degree_keywords):
+            if not current_education["degree"] and any(
+                k in line_lower for k in degree_keywords
+            ):
                 # Clean degree line by removing trailing date info
                 degree_line = line.strip()
                 degree_line_clean = re.sub(
@@ -277,4 +304,3 @@ def extract_education(text: str) -> list:
             educations.append(current_education)
 
     return educations
-
