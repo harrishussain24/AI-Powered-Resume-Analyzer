@@ -244,7 +244,24 @@ const deleteFile = (index) => {
               <span v-else class="no-data">No skills found.</span>
             </div>
           </div>
-          <!-- Add more parsed data sections as needed -->
+          <div v-if="resumeData.analysis.experience?.length" class="resume-section">
+            <h3 class="section-title">Experience</h3>
+            <div class="experience-list">
+              <div v-for="(exp, idx) in resumeData.analysis.experience" :key="idx" class="experience-item">
+                <div class="experience-header">
+                  <span class="job-title">{{ exp.title || 'N/A' }}</span>
+                  <span class="company-name">{{ exp.company || '' }}</span>
+                </div>
+                <div class="experience-meta">
+                  <span v-if="exp.location" class="location">{{ exp.location }}</span>
+                  <span v-if="exp.dates" class="dates">{{ exp.dates }}</span>
+                </div>
+                <ul v-if="exp.bullets?.length" class="experience-bullets">
+                  <li v-for="(bullet, bidx) in exp.bullets" :key="bidx">{{ bullet }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 

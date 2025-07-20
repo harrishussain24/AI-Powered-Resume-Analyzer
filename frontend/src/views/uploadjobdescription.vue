@@ -75,26 +75,6 @@ const showFinalResults = () => {
       <h2>Upload Job Description</h2>
     </div>
 
-    <!-- Progress Indicator -->
-    <div v-if="showProgress" class="progress-container">
-      <div class="progress-card">
-        <div class="progress-header">
-          <div class="progress-icon">🔍</div>
-          <h3 class="progress-title">Analyzing Job Description</h3>
-        </div>
-        <div class="progress-bar-container">
-          <div class="progress-bar">
-            <div class="progress-fill" :style="{ width: analysisProgress + '%' }"></div>
-          </div>
-          <div class="progress-text">{{ Math.round(analysisProgress) }}%</div>
-        </div>
-        <div class="progress-stage">{{ analysisStage }}</div>
-        <div class="progress-spinner">
-          <div class="spinner"></div>
-        </div>
-      </div>
-    </div>
-
     <!-- Job Description Input Section -->
     <div class="job-description-container">
       <div class="job-description-header">
@@ -123,6 +103,27 @@ const showFinalResults = () => {
       </div>
     </div>
 
+    <!-- Progress Indicator -->
+    <div v-if="showProgress" class="progress-container">
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="progress-icon">🔍</div>
+          <h3 class="progress-title">Analyzing Job Description</h3>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: analysisProgress + '%' }"></div>
+          </div>
+          <div class="progress-text">{{ Math.round(analysisProgress) }}%</div>
+        </div>
+        <div class="progress-stage">{{ analysisStage }}</div>
+        <div class="progress-spinner">
+          <div class="spinner"></div>
+        </div>
+      </div>
+    </div>
+
+    
     <!-- Parsed Job Description Section -->
     <div v-if="store.jobDescriptionData" class="job-data-container">
       <div class="job-data-header">
