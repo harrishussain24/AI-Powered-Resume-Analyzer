@@ -2,9 +2,7 @@ from pdfminer.high_level import extract_text
 from fastapi import UploadFile
 import spacy
 import re
-
-
-nlp = spacy.load("en_core_web_sm")
+from app.services.nlp import nlp
 
 
 def extract_text_from_pdf(file: UploadFile) -> str:

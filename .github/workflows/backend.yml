@@ -32,6 +32,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
+      - name: Install spaCy model
+        run: |
+          python -m spacy download en_core_web_sm
+          python -m spacy link en_core_web_sm en
+
       - name: Lint with flake8
         run: |
           pip install flake8
