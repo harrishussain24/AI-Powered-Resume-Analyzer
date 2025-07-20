@@ -50,8 +50,8 @@ const goToSignup = () => {
 </script>
 
 <template>
-  <div class="login-root">
-    <div class="login-container">
+  <div class="login-container">
+    <div class="login-card">
       <!-- Header -->
       <div class="login-header">
         <h1 class="login-title">Welcome Back</h1>
@@ -60,60 +60,58 @@ const goToSignup = () => {
       <!-- Login Form -->
       <form @submit.prevent="handleLogin" class="login-form">
         <!-- Email Field -->
-        <div class="login-form-group">
-          <label for="email" class="login-label">Email Address</label>
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
           <input
             id="email"
             v-model="email"
             type="email"
             required
-            class="login-input"
+            class="form-input"
             placeholder="Enter your email"
           />
         </div>
         <!-- Password Field -->
-        <div class="login-form-group">
-          <label for="password" class="login-label">Password</label>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
           <input
             id="password"
             v-model="password"
             type="password"
             required
-            class="login-input"
+            class="form-input"
             placeholder="Enter your password"
           />
         </div>
         <!-- Error Message -->
-        <div v-if="error" class="login-error">❌ {{ error }}</div>
+        <div v-if="error" class="error-message">❌ {{ error }}</div>
         <!-- Success Message -->
-        <div v-if="success" class="login-success">✅ {{ success }}</div>
+        <div v-if="success" class="success-message">✅ {{ success }}</div>
         <!-- Login Button -->
         <button
           type="submit"
           :disabled="isLoggingIn"
-          class="login-btn"
+          class="login-button"
         >
           <span v-if="isLoggingIn">Signing in...</span>
           <span v-else>Sign In</span>
         </button>
       </form>
       <!-- Sign Up Link -->
-      <div class="login-signup-link">
-        <p>
-          Don't have an account?
-          <button
-            @click="goToSignup"
-            class="login-signup-btn"
-          >
-            Sign up here
-          </button>
-        </p>
+      <div class="signup-link">
+        <span class="signup-text">Don't have an account?</span>
+        <button
+          @click="goToSignup"
+          class="signup-button"
+        >
+          Sign up here
+        </button>
       </div>
       <!-- Back to Home -->
-      <div class="login-back-home">
+      <div class="back-link">
         <button
           @click="router.push('/')"
-          class="login-back-btn"
+          class="back-button"
         >
           ← Back to Resume Analyzer
         </button>

@@ -145,13 +145,13 @@ const deleteFile = (index) => {
       <!-- Header Bar: Heading and Auth Button -->
       <div class="header-bar">
         <h2 class="header-title">Upload Your Resume</h2>
-        <div class="header-auth">
+        <div class="auth-container-bar">
           <div v-if="user" class="user-info">
-            <span class="user-welcome">Welcome, {{ user.name || user.email }}</span>
-            <button @click="logout" class="logout-btn">Logout</button>
+            <span class="user-name">Welcome, {{ user.name || user.email }}</span>
+            <button @click="logout" class="logout-button">Logout</button>
           </div>
-          <div v-else class="login-btn-wrap">
-            <button @click="router.push('/login')" class="login-btn">Login / Signup</button>
+          <div v-else class="login-button-container-bar">
+            <button @click="router.push('/login')" class="login-button-main-bar">Login / Signup</button>
           </div>
         </div>
       </div>
@@ -159,90 +159,89 @@ const deleteFile = (index) => {
       <!-- Upload Area -->
       <div class="upload-area" @click="triggerFileSelect">
         <span class="upload-icon">📄</span>
-        <div class="upload-instructions">Click here to upload your file or drag.</div>
+        <div class="upload-text">Click here to upload your file or drag.</div>
         <span class="upload-format">Supported Format: <u>PDF (5mb max)</u></span>
+        <input ref="fileInput" type="file" accept="application/pdf" class="hidden" @change="handleFileChange" />
       </div>
-      <input type="file" accept=".pdf" ref="fileInput" @change="handleFileChange" class="file-input" />
 
       <!-- Progress Indicator -->
-      <div v-if="showProgress" class="progress-wrap">
+      <div v-if="showProgress" class="progress-container">
         <div class="progress-card">
           <div class="progress-header">
             <div class="progress-icon">📄</div>
             <h3 class="progress-title">Processing Resume</h3>
           </div>
-          <div class="progress-bar-wrap">
-            <div class="progress-bar-bg">
-              <div class="progress-bar" :style="{ width: uploadProgress + '%' }"></div>
+          <div class="progress-bar-container">
+            <div class="progress-bar">
+              <div class="progress-fill" :style="{ width: uploadProgress + '%' }"></div>
             </div>
-            <div class="progress-percent">{{ Math.round(uploadProgress) }}%</div>
+            <div class="progress-text">{{ Math.round(uploadProgress) }}%</div>
           </div>
           <div class="progress-stage">{{ uploadStage }}</div>
-          <div class="progress-spinner-wrap">
-            <div class="progress-spinner"></div>
+          <div class="progress-spinner">
+            <div class="spinner"></div>
           </div>
         </div>
       </div>
 
       <!-- Attached Files Section -->
-      <div class="file-table-wrap">
-        <div class="file-table-header">
-          <h2 class="file-table-title">Attached File</h2>
-          <p class="file-table-desc">Here you can see your uploaded file</p>
+      <div class="attached-files-container">
+        <div class="attached-files-header">
+          <h2 class="attached-files-title">Attached File</h2>
+          <p class="attached-files-subtitle">Here you can see your uploaded file</p>
         </div>
-        <div class="file-table-divider"></div>
-        <div class="file-table-row file-table-row-head">
-          <div>File Name</div>
-          <div>Size</div>
-          <div>Uploaded At</div>
-          <div>Action</div>
+        <div class="attached-files-divider"></div>
+        <div class="attached-files-table-header">
+          <div class="file-header-item">File Name</div>
+          <div class="file-header-item">Size</div>
+          <div class="file-header-item">Uploaded At</div>
+          <div class="file-header-item">Action</div>
         </div>
-        <div class="file-table-divider"></div>
-        <div class="file-table-body">
-          <div v-for="(file, index) in uploadedFiles" :key="index" class="file-table-row">
-            <div>{{ file.name }}</div>
-            <div>{{ file.size }}</div>
-            <div>{{ file.uploadedAt }}</div>
-            <div>
-              <button class="delete-btn" @click="deleteFile(index)">Delete</button>
+        <div class="attached-files-content">
+          <div v-for="(file, index) in uploadedFiles" :key="index" class="file-row">
+            <div class="file-item">{{ file.name }}</div>
+            <div class="file-item">{{ file.size }}</div>
+            <div class="file-item">{{ file.uploadedAt }}</div>
+            <div class="file-item">
+              <button class="action-btn delete-btn" @click="deleteFile(index)">Delete</button>
             </div>
           </div>
-          <div v-if="!uploadedFiles.length" class="file-table-empty">No files uploaded yet.</div>
+          <div v-if="!uploadedFiles.length" class="no-files-message">No files uploaded yet.</div>
         </div>
       </div>
 
       <!-- Resume Data Section -->
-      <div v-if="resumeData" class="resume-data-wrap">
+      <div v-if="resumeData" class="resume-data-container">
         <div class="resume-data-header">
           <h2 class="resume-data-title">Resume Information</h2>
-          <p class="resume-data-desc">Parsed data from your uploaded resume</p>
+          <p class="resume-data-subtitle">Parsed data from your uploaded resume</p>
         </div>
         <div class="resume-data-divider"></div>
-        <div class="resume-data-body">
-          <div class="resume-personal-info">
-            <h3 class="resume-section-title">Personal Information</h3>
-            <div class="resume-personal-grid">
-              <div>
-                <span class="resume-label">Name:</span>
-                <span class="resume-value">{{ resumeData.analysis.name || 'N/A' }}</span>
+        <div class="resume-data-content">
+          <div class="resume-section">
+            <h3 class="section-title">Personal Information</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <span class="info-label">Name:</span>
+                <span class="info-value">{{ resumeData.analysis.name || 'N/A' }}</span>
               </div>
-              <div>
-                <span class="resume-label">Email:</span>
-                <span class="resume-value">{{ resumeData.analysis.email || 'N/A' }}</span>
+              <div class="info-item">
+                <span class="info-label">Email:</span>
+                <span class="info-value">{{ resumeData.analysis.email || 'N/A' }}</span>
               </div>
-              <div>
-                <span class="resume-label">Phone:</span>
-                <span class="resume-value">{{ resumeData.analysis.phone || 'N/A' }}</span>
+              <div class="info-item">
+                <span class="info-label">Phone:</span>
+                <span class="info-value">{{ resumeData.analysis.phone || 'N/A' }}</span>
               </div>
             </div>
           </div>
-          <div class="resume-skills">
-            <h3 class="resume-section-title">Skills</h3>
-            <div class="resume-skills-list">
-              <span v-if="resumeData.analysis.skills?.length" class="resume-skill" v-for="skill in resumeData.analysis.skills" :key="skill">
+          <div class="resume-section">
+            <h3 class="section-title">Skills</h3>
+            <div class="skills-container">
+              <span v-if="resumeData.analysis.skills?.length" class="skill-tag" v-for="skill in resumeData.analysis.skills" :key="skill">
                 {{ skill }}
               </span>
-              <span v-else class="resume-skill-empty">No skills found.</span>
+              <span v-else class="no-data">No skills found.</span>
             </div>
           </div>
           <!-- Add more parsed data sections as needed -->
@@ -250,9 +249,10 @@ const deleteFile = (index) => {
       </div>
 
       <!-- Go to Job Description Button -->
-      <div v-if="resumeData" class="go-jobdesc-btn-wrap">
-        <button @click="goToJobDescriptionView" class="go-jobdesc-btn">
-          Continue to Job Description
+      <div v-if="resumeData" class="continue-button-container">
+        <button @click="goToJobDescriptionView" class="continue-button">
+          <span class="button-text">Continue to Job Description</span>
+          <span class="button-icon">→</span>
         </button>
       </div>
 

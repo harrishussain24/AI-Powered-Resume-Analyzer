@@ -123,112 +123,113 @@ onMounted(async () => {
 
 <template>
   <!-- Main Content -->
-  <div class="matchresults-root">
+  <div>
     <!-- Heading Section -->
-    <div class="matchresults-header">
-      <h2 class="matchresults-title">Match Results</h2>
-      <div class="matchresults-header-divider"></div>
+    <div class="heading-section">
+      <h2>Match Results</h2>
     </div>
 
     <!-- Progress Indicator -->
-    <div v-if="showProgress" class="matchresults-progress-wrap">
-      <div class="matchresults-progress-card">
-        <div class="matchresults-progress-header">
-          <div class="matchresults-progress-icon">🏯</div>
-          <h3 class="matchresults-progress-title">Matching Resume to Job</h3>
+    <div v-if="showProgress" class="progress-container">
+      <div class="progress-card">
+        <div class="progress-header">
+          <div class="progress-icon">🏯</div>
+          <h3 class="progress-title">Matching Resume to Job</h3>
         </div>
-        <div class="matchresults-progress-bar-wrap">
-          <div class="matchresults-progress-bar-bg">
-            <div class="matchresults-progress-bar" :style="{ width: matchProgress + '%' }"></div>
+        <div class="progress-bar-container">
+          <div class="progress-bar">
+            <div class="progress-fill" :style="{ width: matchProgress + '%' }"></div>
           </div>
-          <div class="matchresults-progress-percent">{{ Math.round(matchProgress) }}%</div>
+          <div class="progress-text">{{ Math.round(matchProgress) }}%</div>
         </div>
-        <div class="matchresults-progress-stage">{{ matchStage }}</div>
-        <div class="matchresults-progress-spinner-wrap">
-          <div class="matchresults-progress-spinner"></div>
+        <div class="progress-stage">{{ matchStage }}</div>
+        <div class="progress-spinner">
+          <div class="spinner"></div>
         </div>
       </div>
     </div>
 
     <!-- Loading State -->
-    <div v-if="!matchResult && !error && !showProgress" class="matchresults-loading">
-      <div class="matchresults-loading-spinner"></div>
-      <p class="matchresults-loading-text">Analyzing your resume against the job description...</p>
+    <div v-if="!matchResult && !error && !showProgress" class="loading-container">
+      <div class="loading-spinner"></div>
+      <p class="loading-text">Analyzing your resume against the job description...</p>
     </div>
 
     <!-- Error State -->
-    <div v-else-if="error" class="matchresults-error-wrap">
-      <div class="matchresults-error-icon">❌</div>
-      <h3 class="matchresults-error-title">Analysis Failed</h3>
-      <p class="matchresults-error-text">{{ error }}</p>
+    <div v-else-if="error" class="error-container">
+      <div class="error-icon">❌</div>
+      <h3 class="error-title">Analysis Failed</h3>
+      <p class="error-message">{{ error }}</p>
     </div>
 
     <!-- Results Container -->
-    <div v-else-if="matchResult" class="matchresults-results-wrap">
-      <div class="matchresults-results-header">
-        <h2 class="matchresults-results-title">🏯 Analysis Results</h2>
-        <p class="matchresults-results-desc">Your resume match analysis is complete</p>
+    <div v-else-if="matchResult" class="results-container">
+      <div class="results-header">
+        <h2 class="results-title">🏯 Analysis Results</h2>
+        <p class="results-subtitle">Your resume match analysis is complete</p>
       </div>
-      <div class="matchresults-results-divider"></div>
-      <div class="matchresults-results-body">
+      <div class="results-divider"></div>
+      <div class="results-content">
         <!-- Overall Score Section -->
-        <div class="matchresults-score-wrap">
-          <div class="matchresults-score-header">
-            <h3 class="matchresults-score-title">🏆 Overall Match Score</h3>
-            <div class="matchresults-score-circle">
-              <span>{{ Math.round(matchResult.overall_score * 100) }}%</span>
+        <div class="score-section">
+          <div class="overall-score">
+            <div class="score-header">
+              <h3 class="score-title">🏆 Overall Match Score</h3>
+              <div class="score-circle">
+                <span class="score-value">{{ Math.round(matchResult.overall_score * 100) }}%</span>
+              </div>
             </div>
-          </div>
-          <div class="matchresults-score-bar-bg">
-            <div class="matchresults-score-bar" :style="{ width: matchResult.overall_score * 100 + '%' }"></div>
+            <div class="score-bar">
+              <div class="score-fill" :style="{ width: matchResult.overall_score * 100 + '%' }"></div>
+            </div>
           </div>
         </div>
         <!-- Detailed Scores Section -->
-        <div class="matchresults-details-grid">
+        <div class="scores-grid">
           <!-- Skill Match Score -->
-          <div class="matchresults-detail-card">
-            <div class="matchresults-detail-header">
-              <span class="matchresults-detail-icon">💡</span>
-              <h4 class="matchresults-detail-title">Skill Match</h4>
+          <div class="score-card">
+            <div class="score-card-header">
+              <span class="score-icon">💡</span>
+              <h4 class="score-card-title">Skill Match</h4>
             </div>
-            <div class="matchresults-detail-score">{{ Math.round(matchResult.skill_match_score * 100) }}%</div>
-            <div class="matchresults-detail-bar-bg">
-              <div class="matchresults-detail-bar" :style="{ width: matchResult.skill_match_score * 100 + '%' }"></div>
+            <div class="score-card-value">{{ Math.round(matchResult.skill_match_score * 100) }}%</div>
+            <div class="score-card-bar">
+              <div class="score-card-fill" :style="{ width: matchResult.skill_match_score * 100 + '%' }"></div>
             </div>
           </div>
           <!-- Experience Match Score -->
-          <div class="matchresults-detail-card">
-            <div class="matchresults-detail-header">
-              <span class="matchresults-detail-icon">📈</span>
-              <h4 class="matchresults-detail-title">Experience Match</h4>
+          <div class="score-card">
+            <div class="score-card-header">
+              <span class="score-icon">📈</span>
+              <h4 class="score-card-title">Experience Match</h4>
             </div>
-            <div class="matchresults-detail-score">{{ Math.round(matchResult.experience_match_score * 100) }}%</div>
-            <div class="matchresults-detail-bar-bg">
-              <div class="matchresults-detail-bar" :style="{ width: matchResult.experience_match_score * 100 + '%' }"></div>
+            <div class="score-card-value">{{ Math.round(matchResult.experience_match_score * 100) }}%</div>
+            <div class="score-card-bar">
+              <div class="score-card-fill" :style="{ width: matchResult.experience_match_score * 100 + '%' }"></div>
             </div>
           </div>
         </div>
         <!-- Matched Skills Section -->
-        <div class="matchresults-matched-skills">
-          <h3 class="matchresults-section-title">✅ Matched Skills</h3>
-          <div class="matchresults-skills-list">
+        <div class="skills-section">
+          <h3 class="section-title">✅ Matched Skills</h3>
+          <div class="matched-skills-container">
             <span v-if="matchResult.matched_skills && matchResult.matched_skills.length" 
-                  class="matchresults-skill" 
+                  class="matched-skill-tag" 
                   v-for="skill in matchResult.matched_skills" 
                   :key="skill">
               {{ skill }}
             </span>
-            <span v-else class="matchresults-skill-empty">No matching skills found</span>
+            <span v-else class="no-skills-message">No matching skills found</span>
           </div>
         </div>
         <!-- Missing Requirements Section -->
-        <div class="matchresults-missing-reqs">
-          <h3 class="matchresults-section-title">❌ Missing Requirements</h3>
+        <div class="skills-section">
+          <h3 class="section-title">❌ Missing Requirements</h3>
           <!-- Missing Skills -->
-          <div v-if="matchResult.missing_skills && matchResult.missing_skills.length" class="matchresults-missing-skills">
-            <h4 class="matchresults-missing-title">Missing Skills:</h4>
-            <div class="matchresults-missing-list">
-              <span class="matchresults-missing-item" 
+          <div v-if="matchResult.missing_skills && matchResult.missing_skills.length" class="missing-skills-container">
+            <h4 class="missing-subtitle">Missing Skills:</h4>
+            <div>
+              <span class="missing-skill-tag" 
                     v-for="skill in matchResult.missing_skills" 
                     :key="skill">
                 {{ skill }}
@@ -236,10 +237,10 @@ onMounted(async () => {
             </div>
           </div>
           <!-- Missing Experience -->
-          <div v-if="matchResult.missing_experience && matchResult.missing_experience.length" class="matchresults-missing-experience">
-            <h4 class="matchresults-missing-title">Missing Experience:</h4>
-            <div class="matchresults-missing-list">
-              <span class="matchresults-missing-item" 
+          <div v-if="matchResult.missing_experience && matchResult.missing_experience.length" class="missing-experience-container">
+            <h4 class="missing-subtitle">Missing Experience:</h4>
+            <div>
+              <span class="missing-experience-tag" 
                     v-for="exp in matchResult.missing_experience" 
                     :key="exp">
                 {{ exp }}

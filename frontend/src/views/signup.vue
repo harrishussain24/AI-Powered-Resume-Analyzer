@@ -59,8 +59,8 @@ const goToLogin = () => {
 </script>
 
 <template>
-  <div class="signup-root">
-    <div class="signup-container">
+  <div class="signup-container">
+    <div class="signup-card">
       <!-- Header -->
       <div class="signup-header">
         <h1 class="signup-title">Create Account</h1>
@@ -69,84 +69,82 @@ const goToLogin = () => {
       <!-- Signup Form -->
       <form @submit.prevent="handleSignup" class="signup-form">
         <!-- Name Field -->
-        <div class="signup-form-group">
-          <label for="name" class="signup-label">Full Name</label>
+        <div class="form-group">
+          <label for="name" class="form-label">Full Name</label>
           <input
             id="name"
             v-model="name"
             type="text"
             required
-            class="signup-input"
+            class="form-input"
             placeholder="Enter your full name"
           />
         </div>
         <!-- Email Field -->
-        <div class="signup-form-group">
-          <label for="email" class="signup-label">Email Address</label>
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
           <input
             id="email"
             v-model="email"
             type="email"
             required
-            class="signup-input"
+            class="form-input"
             placeholder="Enter your email"
           />
         </div>
         <!-- Password Field -->
-        <div class="signup-form-group">
-          <label for="password" class="signup-label">Password</label>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
           <input
             id="password"
             v-model="password"
             type="password"
             required
-            class="signup-input"
+            class="form-input"
             placeholder="Enter your password"
           />
         </div>
         <!-- Confirm Password Field -->
-        <div class="signup-form-group">
-          <label for="confirmPassword" class="signup-label">Confirm Password</label>
+        <div class="form-group">
+          <label for="confirmPassword" class="form-label">Confirm Password</label>
           <input
             id="confirmPassword"
             v-model="confirmPassword"
             type="password"
             required
-            class="signup-input"
+            class="form-input"
             placeholder="Confirm your password"
           />
         </div>
         <!-- Error Message -->
-        <div v-if="error" class="signup-error">❌ {{ error }}</div>
+        <div v-if="error" class="error-message">❌ {{ error }}</div>
         <!-- Success Message -->
-        <div v-if="success" class="signup-success">✅ {{ success }}</div>
+        <div v-if="success" class="success-message">✅ {{ success }}</div>
         <!-- Signup Button -->
         <button
           type="submit"
           :disabled="isSigningUp"
-          class="signup-btn"
+          class="signup-button"
         >
           <span v-if="isSigningUp">Creating account...</span>
           <span v-else>Create Account</span>
         </button>
       </form>
       <!-- Login Link -->
-      <div class="signup-login-link">
-        <p>
-          Already have an account?
-          <button
-            @click="goToLogin"
-            class="signup-login-btn"
-          >
-            Sign in here
-          </button>
-        </p>
+      <div class="login-link">
+        <span class="login-text">Already have an account?</span>
+        <button
+          @click="goToLogin"
+          class="login-button-link"
+        >
+          Sign in here
+        </button>
       </div>
       <!-- Back to Home -->
-      <div class="signup-back-home">
+      <div class="back-link">
         <button
           @click="router.push('/')"
-          class="signup-back-btn"
+          class="back-button"
         >
           ← Back to Resume Analyzer
         </button>
