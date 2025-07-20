@@ -1,6 +1,5 @@
 from pdfminer.high_level import extract_text
 from fastapi import UploadFile
-import spacy
 import re
 from app.services.nlp import nlp
 
