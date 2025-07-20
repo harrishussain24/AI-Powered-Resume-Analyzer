@@ -19,8 +19,11 @@ async def upload_resume_to_supabase(file):
     # Upload to Supabase Storage (bucket name: "resumes")
     response = supabase.storage.from_("resumes").upload(file_name, contents, {"content-type": file.content_type})
 
-    if response.error:
-        raise Exception(str(response.error))
+    # Check for failure using status_code or raise a generic error if not successful
+    if hasattr(response, 'status_code') and response.status_code not in (200, 201):
+        raise Exception(f"Upload failed: {getattr(response, 'data', response)}")
+    if hasattr(response, 'error_message') and response.error_message:
+        raise Exception(f"Upload failed: {response.error_message}")
 
     # Get the public URL
     public_url = supabase.storage.from_("resumes").get_public_url(file_name)
