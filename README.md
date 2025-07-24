@@ -1,4 +1,4 @@
-# 🚀 AI-Powered Resume Analyzer
+# 🚀 AI-Powered-Resume-Analyzer-& Job-Matcher-Web-App
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/65796857-8373-48d0-a827-a1a03db9f42d/deploy-status)](https://app.netlify.com/projects/ai-powered-resume-analyzer/deploys)
 [![Frontend CI](https://github.com/harrishussain24/AI-Powered-Resume-Analyzer/actions/workflows/frontend.yml/badge.svg)](https://github.com/harrishussain24/AI-Powered-Resume-Analyzer/actions/workflows/frontend.yml)
