@@ -44,7 +44,7 @@ async def manual_init():
         return {"message": f"DB init failed: {str(e)}"}
 
 
-@app.get("/health")
+@app.api_route("/health", methods=["GET", "HEAD"])
 async def health_check():
     return {"status": "ok"}
 
