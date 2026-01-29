@@ -17,60 +17,53 @@ router = APIRouter()
 async def upload_resume(
     file: UploadFile = File(...), db: AsyncSession = Depends(get_db)
 ):
+    print(f"🔹 Received file: {file.filename}")
     try:
         text = extract_text_from_pdf(file)
+        print(f"🔹 Extracted text length: {len(text) if text else 0}")
     except PDFSyntaxError:
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Invalid PDF file format.",
+            status_code=400, detail="Invalid PDF file format."
         )
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to read PDF file: {str(e)}",
-        )
+        print(f"❌ PDF extraction error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to read PDF file: {str(e)}")
 
     if not text or "No text found" in text:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="No text found in the PDF file.",
-        )
+        raise HTTPException(status_code=422, detail="No text found in PDF.")
 
     text = text.strip()
     if not text:
-        raise HTTPException(
-            status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
-            detail="The PDF file is empty or contains no readable text.",
-        )
+        raise HTTPException(status_code=422, detail="PDF contains no readable text.")
 
     analysis = analyze_resume_text(text)
     if not analysis:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="Failed to analyze the resume text.",
-        )
+        raise HTTPException(status_code=500, detail="Failed to analyze resume text.")
 
-    # Upload the original file to Supabase
+    # Upload to Supabase
     try:
         file_url = await upload_resume_to_supabase(file)
+        print(f"🔹 Supabase file URL: {file_url}")
     except Exception as e:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail=f"Failed to upload to Supabase: {str(e)}",
-        )
+        print(f"❌ Supabase upload error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Failed to upload to Supabase: {str(e)}")
 
     parsed_json = json.dumps(analysis)
 
-    new_resume = Resume(
-        filename=file.filename,
-        content=text,
-        parsed_data=parsed_json,
-        file_url=file_url,
-    )
-
-    db.add(new_resume)
-    await db.commit()
-    await db.refresh(new_resume)
+    try:
+        new_resume = Resume(
+            filename=file.filename,
+            content=text,
+            parsed_data=parsed_json,
+            file_url=file_url,
+        )
+        db.add(new_resume)
+        await db.commit()
+        await db.refresh(new_resume)
+        print(f"🔹 Resume saved to DB with ID: {new_resume.id}")
+    except Exception as e:
+        print(f"❌ Database error: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Database error: {str(e)}")
 
     file.file.close()
 
