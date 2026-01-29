@@ -31,13 +31,20 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+          # If the app subfolder has its own requirements (including a pinned spaCy model wheel), install them too
+          if [ -f app/requirements.txt ]; then pip install -r app/requirements.txt; fi
           pip install pytest
 
-      - name: Install spaCy model
+      - name: Install spaCy and English model
         run: |
-          # Ensure packaging tools are up-to-date, then let spaCy CLI pick the matching model
+          pip install spacy==3.8.7
+          pip install https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.7/en_core_web_sm-3.8.7-py3-none-any.whl
+          python -m spacy link en_core_web_sm en --force
+
+      - name: Validate spaCy installation
+        run: |
+          # Confirm spaCy and any installed model wheels are compatible
           python -m pip install --upgrade pip setuptools wheel
-          python -m spacy download en_core_web_sm
           python -m spacy validate
 
       - name: Create .env file
