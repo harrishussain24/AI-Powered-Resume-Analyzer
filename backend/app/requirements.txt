@@ -16,8 +16,7 @@ deprecation==2.1.0
 dnspython==2.7.0
 ecdsa==0.19.1
 email_validator==2.2.0
-https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.7.1/en_core_web_sm-3.7.1.tar.gz
-fastapi==0.115.14
+en-core-web-sm==3.7.1fastapi==0.115.14
 filelock==3.18.0
 fsspec==2025.5.1
 git-filter-repo==2.47.0
