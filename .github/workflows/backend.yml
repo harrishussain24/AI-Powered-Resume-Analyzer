@@ -4,11 +4,11 @@ on:
   push:
     branches: [main]
     paths:
-      - 'backend/**'
+      - "backend/**"
   pull_request:
     branches: [main]
     paths:
-      - 'backend/**'
+      - "backend/**"
 
 jobs:
   build-and-test:
@@ -16,7 +16,7 @@ jobs:
 
     defaults:
       run:
-        working-directory: backend  # All commands run inside backend folder
+        working-directory: backend # All commands run inside backend folder
 
     steps:
       - name: Checkout repository
@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python 3.11
         uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install dependencies
         run: |
@@ -33,11 +33,12 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Install spaCy model
+      - name: Install spaCy model (explicit wheel)
         run: |
-          python -m spacy download en_core_web_sm
-          python -m spacy link en_core_web_sm en
-      
+          # Install the model wheel that matches spacy==3.7.2 to avoid CLI download issues
+          python -m pip install https://github.com/explosion/spacy-models/releases/download/v3.7.2/en_core_web_sm-3.7.2-py3-none-any.whl
+          python -m spacy validate
+
       - name: Create .env file
         run: |
           echo "DATABASE_URL=${{ secrets.DATABASE_URL }}" > .env
