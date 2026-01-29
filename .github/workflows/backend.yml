@@ -33,10 +33,11 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
-      - name: Install spaCy model (explicit wheel)
+      - name: Install spaCy model
         run: |
-          # Install the model wheel that matches spacy==3.7.2 to avoid CLI download issues
-          python -m pip install https://github.com/explosion/spacy-models/releases/download/v3.7.2/en_core_web_sm-3.7.2-py3-none-any.whl
+          # Ensure packaging tools are up-to-date, then let spaCy CLI pick the matching model
+          python -m pip install --upgrade pip setuptools wheel
+          python -m spacy download en_core_web_sm
           python -m spacy validate
 
       - name: Create .env file
