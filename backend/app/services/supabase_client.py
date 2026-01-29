@@ -7,7 +7,6 @@ load_dotenv()
 
 SUPABASE_URL = os.getenv("SUPABASE_URL")
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")
-print(SUPABASE_URL)
 
 supabase = create_client(SUPABASE_URL, SUPABASE_KEY)
 
@@ -22,12 +21,13 @@ async def upload_resume_to_supabase(file):
         file_name, contents, {"content-type": file.content_type}
     )
 
-    # Check for failure using status_code or raise a generic error if not successful
-    if hasattr(response, "status_code") and response.status_code not in (200, 201):
-        raise Exception(f"Upload failed: {getattr(response, 'data', response)}")
-    if hasattr(response, "error_message") and response.error_message:
-        raise Exception(f"Upload failed: {response.error_message}")
+    # Check for failure
+    if response.get("error"):
+        raise Exception(f"Upload failed: {response['error']['message']}")
 
     # Get the public URL
-    public_url = supabase.storage.from_("resumes").get_public_url(file_name)
-    return public_url
+    public_url_response = supabase.storage.from_("resumes").get_public_url(file_name)
+    if public_url_response.get("error"):
+        raise Exception(f"Failed to get public URL: {public_url_response['error']['message']}")
+
+    return public_url_response["data"]["publicUrl"]
