@@ -18,14 +18,14 @@ async def upload_resume_to_supabase(file):
         file_name = f"{unique_id}_{file.filename}"
 
         # Upload (will raise exception if RLS or auth fails)
-        upload_response = supabase.storage.from_(SUPABASE_BUCKET).upload(
+        upload_response = supabase.storage.from_('resumes').upload(
             file_name,
             contents,
             file_options={"content-type": file.content_type},
         )
 
         # Build public URL (bucket must be public)
-        public_url = supabase.storage.from_(SUPABASE_BUCKET).get_public_url(file_name)
+        public_url = supabase.storage.from_('resumes').get_public_url(file_name)
 
         return public_url
 
