@@ -16,18 +16,15 @@ async def upload_resume_to_supabase(file):
     unique_id = str(uuid.uuid4())
     file_name = f"{unique_id}_{file.filename}"
 
-    # Upload to Supabase Storage (bucket name: "resumes")
-    response = supabase.storage.from_("resumes").upload(
-        file_name, contents, {"content-type": file.content_type}
+    response = supabase.storage.from_(SUPABASE_BUCKET).upload(
+        file_name,
+        contents,
+        {"content-type": file.content_type},
     )
 
-    # Check for failure
-    if response.get("error"):
-        raise Exception(f"Upload failed: {response['error']['message']}")
+    # ✅ CORRECT check (Supabase SDK v2)
+    if response.error:
+        raise Exception(f"Supabase upload error: {response.error}")
 
-    # Get the public URL
-    public_url_response = supabase.storage.from_("resumes").get_public_url(file_name)
-    if public_url_response.get("error"):
-        raise Exception(f"Failed to get public URL: {public_url_response['error']['message']}")
-
-    return public_url_response["data"]["publicUrl"]
+    public_url = supabase.storage.from_(SUPABASE_BUCKET).get_public_url(file_name)
+    return public_url
