@@ -26,5 +26,5 @@ async def upload_resume_to_supabase(file):
     if response.error:
         raise Exception(f"Supabase upload error: {response.error}")
 
-    public_url = supabase.storage.from_(SUPABASE_BUCKET).get_public_url(file_name)
+    public_url = supabase.storage.from_(resumes).get_public_url(file_name)
     return public_url
