@@ -16,7 +16,7 @@ async def upload_resume_to_supabase(file):
     unique_id = str(uuid.uuid4())
     file_name = f"{unique_id}_{file.filename}"
 
-    response = supabase.storage.from_(SUPABASE_BUCKET).upload(
+    response = supabase.storage.from_(resumes).upload(
         file_name,
         contents,
         {"content-type": file.content_type},
